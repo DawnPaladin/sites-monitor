@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
 
+const Group = props => (
+  <li className="group">
+    {props.group.id}
+    {/* system goes here */}
+  </li>
+);
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -20,14 +27,12 @@ class App extends Component {
     ;
   }
   render() {
-    let groups = this.state.groups.map((group, index) => {
-      return <ul key={index} className="group">{group.id}</ul>
-    });
+    var groups = this.state.groups.map((group, index) => { return <Group key={index} group={group} /> });
     return (
       <div className="monitor">
-        <div className="groups">
+        <ul className="groups">
           {groups}
-        </div>
+        </ul>
       </div>
     );
   }
