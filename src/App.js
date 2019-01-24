@@ -3,6 +3,22 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+    this.getStatus = this.getStatus.bind(this);
+    this.getStatus();
+  }
+  getStatus() {
+    console.log("Started");
+    fetch("http://proxy.hkijharris.test/getStatus.php")
+      .then(response => response.json())
+      .then(json => {
+        console.log(json.data);
+        this.setState('systems', json.data);
+      })
+    ;
+  }
   render() {
     return (
       <div className="App">
