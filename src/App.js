@@ -1,12 +1,7 @@
-import React, { Component } from 'react';
-import './App.css';
+// TODO: Site must calculate whether it's down or up based on whether there are more servers down than its minimum_notificate_real_server value
 
-const Group = props => (
-  <li className="group">
-    {props.group.id}
-    {/* system goes here */}
-  </li>
-);
+import React, { Component } from 'react';
+import './App.scss';
 
 class App extends Component {
   constructor(props) {
@@ -35,6 +30,55 @@ class App extends Component {
         </ul>
       </div>
     );
+  }
+}
+
+const Group = props => {
+  var systems = props.group.virtual_services.map(system => <System key={system.name} system={system} />);
+  return (
+    <li className="group">
+      {props.group.id}
+      {systems}
+    </li>
+  )
+};
+
+class System extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      servers: this.props.system.servers
+    }
+    this.serverColor = this.serverColor.bind(this);
+  }
+  serverColor(opStatus) {
+    switch (opStatus) {
+      case 'enable':
+        return 'green';
+      case 'disable':
+        return 'grey';
+      case 'out-of-service-health':
+        return 'red';
+      default:
+        console.warn("Unexpected server status", opStatus);
+    }
+  }
+  render() {
+    var servers = this.state.servers.map(server => (
+      <div 
+        className={ "rect " + this.serverColor(server.operational_status)}
+        server={server}
+        key={server.id} 
+      ></div>
+    ));
+    return (
+      <div className="system">
+        <div className="green circle"></div>
+        <div className="rects">
+          {servers}
+        </div>
+      </div>
+    )
   }
 }
 

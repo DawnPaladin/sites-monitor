@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i');
+
+@mixin desktop {
+	@media (max-width: 1799px) { @content; }
+}
+@mixin jumbo {
+	@media (min-width: 1800px) { @content; }
+}
+
+html {
+	background: black;
+}
+
+.groups {
+	margin-top: 0;
+	margin-bottom: 0;
+	list-style: none;
+	padding: 1em;
+}
+
+.group {
+	color: white;
+	font-family: 'Roboto', sans-serif;
+	line-height: 1.75em;
+	@include desktop {
+		font-size: 24px;
+	}
+	@include jumbo {
+		font-size: 38px;
+	}
+}
+
+.green {
+	background: rgb(0, 255, 0);
+}
+.red {
+	background: rgb(255, 20, 20);
+}
+.grey {
+	background: rgb(111,111,111);
+}
+
+.circle {
+	position: absolute;
+	bottom: 0;
+	box-sizing: border-box;
+	width: 1em;
+	height: 1em;	
+	border: .1em solid rgba(0, 0, 0, .75);
+	border-radius: 50%;
+}
+
+.system {
+	display: inline-block;
+	position: relative;
+	margin-left: .25em;
+	margin-bottom: -.1em;
+	width: 1em;
+}
+
+.rects {
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+
+$thick-border: .1em solid rgba(0, 0, 0, .75);
+$thin-border:  .055em solid rgba(0, 0, 0, .75);
+.rect {
+	flex: 1 1 0;
+	height: .5em;
+	box-sizing: border-box;
+	border: $thin-border;
+	border-top: $thick-border;
+	border-bottom: $thick-border;
+	&:first-child {
+		border-left: $thick-border;	
+	}
+	&:last-child {
+		border-right: $thick-border;	
+	}
+}
