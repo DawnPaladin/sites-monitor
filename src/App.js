@@ -74,13 +74,13 @@ class System extends Component {
 	serverColor(opStatus) {
 		switch (opStatus) {
 			case 'enable':
-			return 'green';
+				return 'green';
 			case 'disable':
-			return 'grey';
+				return 'grey';
 			case 'out-of-service-health':
-			return 'red';
+				return 'red';
 			default:
-			console.warn("Unexpected server status", opStatus);
+				console.warn("Unexpected server status", opStatus);
 		}
 	}
 	render() {
