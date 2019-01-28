@@ -33,9 +33,10 @@ class App extends Component {
 
 const Group = props => {
 	var systems = props.group.virtual_services.map(system => <System key={system.name} system={system} />);
+	const replaceUnderscores = string => string.replace(/_/g, ' ');
 	return (
 		<li className="group">
-			{props.group.id}
+			{replaceUnderscores(props.group.id)}
 			{systems}
 		</li>
 	)
