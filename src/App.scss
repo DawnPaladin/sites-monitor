@@ -50,6 +50,17 @@ html {
 	border-radius: 50%;
 }
 
+.red.circle::before {
+	content: '';
+	position: absolute;
+	width: 1.5em;
+	height: 4em;
+	left: -.35em;
+	top: -1.5em;
+	z-index: -1;
+	background: radial-gradient(closest-side, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 0) 100%);
+}
+
 .system {
 	display: inline-block;
 	position: relative;
