@@ -38,9 +38,9 @@ class App extends Component {
 					</ul>
 				</div>
 				<div className="stats">
-					<StatLine name="Up" sites="X" servers="X" colorName="green" />
-					<StatLine name="Disabled" sites="X" servers="X" colorName="grey" />
-					<StatLine name="Down" sites="X" servers="X" colorName="red" />
+					<StatLine name="Up" services="X" servers="X" colorName="green" />
+					<StatLine name="Disabled" services="X" servers="X" colorName="grey" />
+					<StatLine name="Down" services="X" servers="X" colorName="red" />
 				</div>
 			</div>
 		);
@@ -50,7 +50,7 @@ class App extends Component {
 class StatLine extends Component {
 	static propTypes = {
 		name: PropTypes.string.isRequired,
-		sites: PropTypes.number.isRequired,
+		services: PropTypes.number.isRequired,
 		servers: PropTypes.number.isRequired,
 		colorName: PropTypes.string,
 		bgColor: PropTypes.string,
@@ -62,7 +62,7 @@ class StatLine extends Component {
 		return <div className="stat-line">
 			<strong>{this.props.name.toUpperCase()}: </strong>
 			<span className={"circle " + this.props.colorName}></span>
-			<span>{this.props.sites} sites,</span>
+			<span>{this.props.services} services,</span>
 			<span className={"square " + this.props.colorName}></span>
 			<span>{this.props.servers} servers</span>
 		</div>
@@ -87,10 +87,10 @@ class System extends Component {
 			servers: this.props.system.servers
 		}
 		this.serverColor = this.serverColor.bind(this);
-		this.isSiteDown = this.isSiteDown.bind(this);
-		this.siteColor = this.siteColor.bind(this);
+		this.isServiceDown = this.isServiceDown.bind(this);
+		this.serviceColor = this.serviceColor.bind(this);
 	}
-	isSiteDown() {
+	isServiceDown() {
 		let serversDown = 0;
 		let threshold = parseInt(this.props.system.minimum_notificate_real_server);
 		this.state.servers.forEach(server => {
@@ -98,8 +98,8 @@ class System extends Component {
 		});
 		return serversDown > 0 && serversDown >= threshold;
 	}
-	siteColor() {
-		return this.isSiteDown() ? "red" : "green";
+	serviceColor() {
+		return this.isServiceDown() ? "red" : "green";
 	}
 	serverColor(opStatus) {
 		switch (opStatus) {
@@ -123,7 +123,7 @@ class System extends Component {
 		));
 		return (
 			<div className="system">
-				<div className={"circle " + this.siteColor()}></div>
+				<div className={"circle " + this.serviceColor()}></div>
 				<div className="rects">
 					{servers}
 				</div>
