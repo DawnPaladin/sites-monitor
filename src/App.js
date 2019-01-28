@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import './App.scss';
 
 class App extends Component {
@@ -30,12 +31,41 @@ class App extends Component {
 	render() {
 		var groups = this.state.groups.map((group, index) => { return <Group key={index} group={group} /> });
 		return (
-			<div className="monitor">
-				<ul className="groups">
-					{groups}
-				</ul>
+			<div id="App">
+				<div className="monitor">
+					<ul className="groups">
+						{groups}
+					</ul>
+				</div>
+				<div className="stats">
+					<StatLine name="Up" sites="X" servers="X" colorName="green" />
+					<StatLine name="Disabled" sites="X" servers="X" colorName="grey" />
+					<StatLine name="Down" sites="X" servers="X" colorName="red" />
+				</div>
 			</div>
 		);
+	}
+}
+
+class StatLine extends Component {
+	static propTypes = {
+		name: PropTypes.string.isRequired,
+		sites: PropTypes.number.isRequired,
+		servers: PropTypes.number.isRequired,
+		colorName: PropTypes.string,
+		bgColor: PropTypes.string,
+	}
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return <div className="stat-line">
+			<strong>{this.props.name.toUpperCase()}: </strong>
+			<span className={"circle " + this.props.colorName}></span>
+			<span>{this.props.sites} sites,</span>
+			<span className={"square " + this.props.colorName}></span>
+			<span>{this.props.servers} servers</span>
+		</div>
 	}
 }
 
