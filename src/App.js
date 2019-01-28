@@ -1,5 +1,3 @@
-// TODO: Site must calculate whether it's down or up based on whether there are more servers down than its minimum_notificate_real_server value
-
 import React, { Component } from 'react';
 import './App.scss';
 
@@ -50,6 +48,19 @@ class System extends Component {
 			servers: this.props.system.servers
 		}
 		this.serverColor = this.serverColor.bind(this);
+		this.isSiteDown = this.isSiteDown.bind(this);
+		this.siteColor = this.siteColor.bind(this);
+	}
+	isSiteDown() {
+		let serversDown = 0;
+		let threshold = parseInt(this.props.system.minimum_notificate_real_server);
+		this.state.servers.forEach(server => {
+			if (server.operational_status === 'out-of-service-health') serversDown += 1;
+		});
+		return serversDown > 0 && serversDown >= threshold;
+	}
+	siteColor() {
+		return this.isSiteDown() ? "red" : "green";
 	}
 	serverColor(opStatus) {
 		switch (opStatus) {
@@ -73,7 +84,7 @@ class System extends Component {
 		));
 		return (
 			<div className="system">
-				<div className="green circle"></div>
+				<div className={"circle " + this.siteColor()}></div>
 				<div className="rects">
 					{servers}
 				</div>
