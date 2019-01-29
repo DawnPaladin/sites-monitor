@@ -13,19 +13,19 @@ class App extends Component {
 	}
 	getStatus() {
 		fetch("http://proxy.hkijharris.test/getStatus.php")
-		.then(response => response.json())
-		.then(json => {
-			var groups = json.data;
-			groups.sort((groupA, groupB) => {
-				var nameA = groupA.id.toUpperCase();
-				var nameB = groupB.id.toUpperCase();
-				if (nameA < nameB) return -1;
-				if (nameA > nameB) return 1;
-				return 0; // names must be equal
-			});
-			console.log(groups);
-			this.setState({groups: groups});
-		})
+			.then(response => response.json())
+			.then(json => {
+				var groups = json.data;
+				groups.sort((groupA, groupB) => {
+					var nameA = groupA.id.toUpperCase();
+					var nameB = groupB.id.toUpperCase();
+					if (nameA < nameB) return -1;
+					if (nameA > nameB) return 1;
+					return 0; // names must be equal
+				});
+				console.log(groups);
+				this.setState({groups: groups});
+			})
 		;
 	}
 	render() {
