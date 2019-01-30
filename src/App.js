@@ -80,6 +80,9 @@ class App extends Component {
 	}
 	render() {
 		var groups = this.state.groups.map((group, index) => { return <Group key={index} group={group} /> });
+		if (groups.length === 0) {
+			groups = <div className="loading">Loading...</div>
+		}
 		return (
 			<div id="App">
 				<div className="monitor">
