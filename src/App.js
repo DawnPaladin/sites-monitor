@@ -45,8 +45,7 @@ class App extends Component {
 				console.log(groups);
 				this.setState({groups: groups});
 				return groups;
-			})
-			.then(groups => {
+			}).then(groups => {
 				var serviceStats = {
 					up: 0,
 					disabled: 0,
@@ -75,6 +74,8 @@ class App extends Component {
 					});
 				});
 				this.setState({ serviceStats: serviceStats, serverStats: serverStats });
+			}).catch(err => {
+				document.getElementsByClassName('loading')[0].innerHTML = err;
 			});
 		;
 	}
