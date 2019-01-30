@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import './App.scss';
 
 class App extends Component {
@@ -88,31 +88,28 @@ class App extends Component {
 					</ul>
 				</div>
 				<div className="stats">
-					<StatLine name="Up" services={this.state.serviceStats.up} servers={this.state.serverStats.up} colorName="green" />
-					<StatLine name="Disabled" services={this.state.serviceStats.disabled} servers={this.state.serverStats.disabled} colorName="grey" />
-					<StatLine name="Down" services={this.state.serviceStats.down} servers={this.state.serverStats.down} colorName="red" />
+					<div className="stat-line stat-line-green">
+						<strong>UP: </strong>
+						<span className="circle green"></span>
+						<span>{this.state.serviceStats.up} services,</span>
+						<span className="square green"></span>
+						<span>{this.state.serverStats.up} servers</span>
+					</div>
+					<div className="stat-line stat-line-grey">
+						<strong>DISABLED: </strong>
+						<span className="square grey"></span>
+						<span>{this.state.serverStats.disabled} servers</span>
+					</div>
+					<div className="stat-line stat-line-red">
+						<strong>DOWN: </strong>
+						<span className="circle red"></span>
+						<span>{this.state.serviceStats.down} services,</span>
+						<span className="square red"></span>
+						<span>{this.state.serverStats.down} servers</span>
+					</div>
 				</div>
 			</div>
 		);
-	}
-}
-
-class StatLine extends Component {
-	static propTypes = {
-		name: PropTypes.string.isRequired,
-		services: PropTypes.number.isRequired,
-		servers: PropTypes.number.isRequired,
-		colorName: PropTypes.string,
-		bgColor: PropTypes.string,
-	}
-	render() {
-		return <div className="stat-line">
-			<strong>{this.props.name.toUpperCase()}: </strong>
-			<span className={"circle " + this.props.colorName}></span>
-			<span>{this.props.services} services,</span>
-			<span className={"square " + this.props.colorName}></span>
-			<span>{this.props.servers} servers</span>
-		</div>
 	}
 }
 

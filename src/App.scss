@@ -125,7 +125,6 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	color: white;
 	font-family: 'Roboto', sans-serif;
 	line-height: 1.75em;
-	margin: .5em;
 	@include desktop {
 		font-size: 24px;
 	}
@@ -134,11 +133,35 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	}
 }
 .stat-line {
-	color: white;
+	color: black;
 	text-align: center;
+	padding: 0 1em;
 	.circle, .square {
-		position: static;
+		position: relative;
 		display: inline-block;
 		margin: 0 0.25em;
+		bottom: -.125em;
 	}
+}
+@mixin scan-lines($opacity) {
+	position: relative;
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0; right: 0; bottom: 0; left: 0;
+		opacity: $opacity;
+		background: url('/domino-small.png');
+	}
+}
+.stat-line-green {
+	background: linear-gradient(180deg, #E2FFE0 17.68%, #9EFF95 100%);
+	@include scan-lines(0.25);
+}
+.stat-line-grey {
+	background: #BEBEBE;
+	@include scan-lines(0.2);
+}
+.stat-line-red {
+	background: linear-gradient(180deg, #FFABAB 0%, #FFE9E9 100%);
+	@include scan-lines(0.25);
 }
