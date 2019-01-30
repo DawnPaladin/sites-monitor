@@ -125,6 +125,7 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	color: white;
 	font-family: 'Roboto', sans-serif;
 	line-height: 1.75em;
+	margin: .5em;
 	@include desktop {
 		font-size: 24px;
 	}
@@ -134,6 +135,7 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 }
 .stat-line {
 	color: white;
+	text-align: center;
 	.circle, .square {
 		position: static;
 		display: inline-block;

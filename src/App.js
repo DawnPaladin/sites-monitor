@@ -6,10 +6,29 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			groups: []
+			groups: [],
+			serviceStats: {
+				up: 0,
+				disabled: 0,
+				down: 0,
+			},
+			serverStats: {
+				up: 0,
+				disabled: 0,
+				down: 0,
+			},
 		};
 		this.getStatus = this.getStatus.bind(this);
+		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
 		this.getStatus();
+	}
+	checkIfServiceIsDown(service) {
+		let serversDown = 0;
+		let threshold = parseInt(service.minimum_notificate_real_server);
+		service.servers.forEach(server => {
+			if (server.operational_status === 'out-of-service-health') serversDown += 1;
+		});
+		return serversDown > 0 && serversDown >= threshold;
 	}
 	getStatus() {
 		fetch("http://proxy.hkijharris.test/getStatus.php")
@@ -25,7 +44,38 @@ class App extends Component {
 				});
 				console.log(groups);
 				this.setState({groups: groups});
+				return groups;
 			})
+			.then(groups => {
+				var serviceStats = {
+					up: 0,
+					disabled: 0,
+					down: 0,
+				}
+				var serverStats = {
+					up: 0,
+					disabled: 0,
+					down: 0,
+				}
+				groups.forEach(group => {
+					group.virtual_services.forEach(service => {
+						if (this.checkIfServiceIsDown(service)) {
+							service.status = "down";
+							serviceStats.down += 1;
+						} else {
+							service.status = "up";
+							serviceStats.up += 1;
+						}
+						service.servers.forEach(server => {
+							if (server.operational_status === "enable") { serverStats.up += 1; } 
+							else if (server.operational_status === "disable") { serverStats.disabled += 1; }
+							else if (server.operational_status === "out-of-service-health") { serverStats.down += 1; }
+							else { console.warn("Unexpected server status", server.operational_status); }
+						});
+					});
+				});
+				this.setState({ serviceStats: serviceStats, serverStats: serverStats });
+			});
 		;
 	}
 	render() {
@@ -38,9 +88,9 @@ class App extends Component {
 					</ul>
 				</div>
 				<div className="stats">
-					<StatLine name="Up" services="X" servers="X" colorName="green" />
-					<StatLine name="Disabled" services="X" servers="X" colorName="grey" />
-					<StatLine name="Down" services="X" servers="X" colorName="red" />
+					<StatLine name="Up" services={this.state.serviceStats.up} servers={this.state.serverStats.up} colorName="green" />
+					<StatLine name="Disabled" services={this.state.serviceStats.disabled} servers={this.state.serverStats.disabled} colorName="grey" />
+					<StatLine name="Down" services={this.state.serviceStats.down} servers={this.state.serverStats.down} colorName="red" />
 				</div>
 			</div>
 		);
@@ -87,19 +137,13 @@ class System extends Component {
 			servers: this.props.system.servers
 		}
 		this.serverColor = this.serverColor.bind(this);
-		this.isServiceDown = this.isServiceDown.bind(this);
 		this.serviceColor = this.serviceColor.bind(this);
 	}
-	isServiceDown() {
-		let serversDown = 0;
-		let threshold = parseInt(this.props.system.minimum_notificate_real_server);
-		this.state.servers.forEach(server => {
-			if (server.operational_status === 'out-of-service-health') serversDown += 1;
-		});
-		return serversDown > 0 && serversDown >= threshold;
-	}
+	// TODO: unify the next two functions
 	serviceColor() {
-		return this.isServiceDown() ? "red" : "green";
+		if (this.props.system.status === "up") return "green";
+		if (this.props.system.status === "down") return "red";
+		console.warn("Unexpected system status", this.props.system.status);
 	}
 	serverColor(opStatus) {
 		switch (opStatus) {
