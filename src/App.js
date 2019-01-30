@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import './App.scss';
 
+var simulateDownedService = true;
+
 class App extends Component {
 	constructor(props) {
 		super(props);
@@ -17,6 +19,7 @@ class App extends Component {
 				disabled: 0,
 				down: 0,
 			},
+			downedServices: [],
 		};
 		this.getStatus = this.getStatus.bind(this);
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
@@ -28,9 +31,10 @@ class App extends Component {
 		service.servers.forEach(server => {
 			if (server.operational_status === 'out-of-service-health') serversDown += 1;
 		});
-		return serversDown > 0 && serversDown >= threshold;
+		return (serversDown > 0 || true) && serversDown >= threshold;
 	}
 	getStatus() {
+		const replaceUnderscores = string => string.replace(/_/g, ' ');
 		fetch("http://proxy.hkijharris.test/getStatus.php")
 			.then(response => response.json())
 			.then(json => {
@@ -41,6 +45,10 @@ class App extends Component {
 					if (nameA < nameB) return -1;
 					if (nameA > nameB) return 1;
 					return 0; // names must be equal
+				});
+				groups.forEach(group => {
+					group.id = replaceUnderscores(group.id);
+					group.virtual_services.forEach(service => service.id = replaceUnderscores(service.id));
 				});
 				console.log(groups);
 				this.setState({groups: groups});
@@ -61,6 +69,7 @@ class App extends Component {
 						if (this.checkIfServiceIsDown(service)) {
 							service.status = "down";
 							serviceStats.down += 1;
+							this.setState({ downedServices: [...this.state.downedServices, service] });
 						} else {
 							service.status = "up";
 							serviceStats.up += 1;
@@ -84,6 +93,7 @@ class App extends Component {
 		if (groups.length === 0) {
 			groups = <div className="loading">Loading...</div>
 		}
+		var downedServices = this.state.downedServices.map(service => <DownedService service={service} />);
 		return (
 			<div id="App">
 				<div className="monitor">
@@ -104,12 +114,19 @@ class App extends Component {
 						<span className="square grey"></span>
 						<span>{this.state.serverStats.disabled} servers</span>
 					</div>
-					<div className="stat-line stat-line-red">
-						<strong>DOWN: </strong>
-						<span className="circle red"></span>
-						<span>{this.state.serviceStats.down} services,</span>
-						<span className="square red"></span>
-						<span>{this.state.serverStats.down} servers</span>
+					<div className="downed">
+						<div className="stat-line stat-line-red">
+							{simulateDownedService && <strong>**SIMULATED**<br/></strong>}
+							<strong>DOWN: </strong>
+							<span className="circle red"></span>
+							<span>{this.state.serviceStats.down} services,</span>
+							<span className="square red"></span>
+							<span>{this.state.serverStats.down} servers</span>
+							
+						</div>
+						<div className="downed-services">
+							{downedServices}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -119,14 +136,23 @@ class App extends Component {
 
 const Group = props => {
 	var systems = props.group.virtual_services.map(system => <System key={system.name} system={system} />);
-	const replaceUnderscores = string => string.replace(/_/g, ' ');
 	return (
 		<li className="group">
-			{replaceUnderscores(props.group.id)}
+			{props.group.id}
 			{systems}
 		</li>
 	)
 };
+
+const serviceColor = {
+	up: "green",
+	down: "red",
+}
+const serverColor = {
+	enable: "green",
+	disable: "grey",
+	"out-of-service-health": "red"
+}
 
 class System extends Component {
 	constructor(props) {
@@ -135,31 +161,38 @@ class System extends Component {
 			servers: this.props.system.servers
 		}
 	}
-	serviceColor = {
-		up: "green",
-		down: "red",
-	}
-	serverColor = {
-		enable: "green",
-		disable: "grey",
-		"out-of-service-health": "red"
-	}
 	render() {
 		var servers = this.state.servers.map(server => (
 			<div 
-				className={ "rect " + this.serverColor[server.operational_status]}
+				className={ "rect " + serverColor[server.operational_status]}
 				server={server}
 				key={server.id} 
 			></div>
 		));
 		return (
 			<div className="system">
-				<div className={"circle " + this.serviceColor[this.props.system.status]}></div>
+				<div className={"circle " + serviceColor[this.props.system.status]}></div>
 				<div className="rects">
 					{servers}
 				</div>
 			</div>
 		)
+	}
+}
+
+class DownedService extends Component {
+	render() {
+		var servers = this.props.service.servers.map(server => <div className="server indent">
+				<div className={"square " + serverColor[server.operational_status]}></div>
+				<div className="server-name">{server.id}</div>
+		</div>)
+		return <div className="downed-service">
+			<div className="red circle"></div>
+			<div className="downed-service-name">{this.props.service.id}</div>
+			<div>
+				{servers}
+			</div>
+		</div>
 	}
 }
 

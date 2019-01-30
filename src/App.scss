@@ -60,11 +60,13 @@ html {
 }
 
 .square {
+	display: inline-block;
 	width: .8em;
 	height: .8em;	
 	border: .1em solid rgba(0, 0, 0, .75);
 }
 .circle {
+	display: inline-block;
 	position: absolute;
 	bottom: 0;
 	box-sizing: border-box;
@@ -141,6 +143,9 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	@include jumbo {
 		font-size: 38px;
 	}
+	.circle, .square {
+		border: .15em solid black;
+	}
 }
 .stat-line {
 	color: black;
@@ -148,7 +153,6 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	padding: 0 1em;
 	.circle, .square {
 		position: relative;
-		display: inline-block;
 		margin: 0 0.25em;
 		bottom: -.125em;
 	}
@@ -160,18 +164,65 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 		position: absolute;
 		top: 0; right: 0; bottom: 0; left: 0;
 		opacity: $opacity;
-		background: url('/domino-small.png');
+		background: url('/domino.png');
 	}
 }
 .stat-line-green {
-	background: linear-gradient(180deg, #E2FFE0 17.68%, #9EFF95 100%);
+	background: hsl(115, 100%, 73.9%);
 	@include scan-lines(0.25);
 }
 .stat-line-grey {
 	background: #BEBEBE;
 	@include scan-lines(0.2);
 }
-.stat-line-red {
-	background: linear-gradient(180deg, #FFABAB 0%, #FFE9E9 100%);
+.downed {
+	background: hsl(0, 100%, 80%);
 	@include scan-lines(0.25);
+	z-index: -1;
+}
+.downed-services {
+	color: black;
+	padding: 0 1em;
+	.circle, .square {
+		position: relative;
+		margin: 0 0.25em;
+		bottom: -.55em;
+		z-index: 1;
+		border: .25em solid black;
+	}
+	.circle {
+		height: 1.75em;
+		width: 1.75em;
+	}
+	.square {
+		height: 1.3em;
+		width: 1.3em;
+	}
+	.downed-service-name, .server-name {
+		position: relative;
+		display: inline-block;
+		background: white;
+		padding-left: 1.25em;
+		padding-right: .5em;
+		margin-left: -1em;
+	}
+	.downed-service-name {
+		font-weight: bold;
+	}
+}
+
+.indent {
+	margin-left: 2em;
+	position: relative;
+	&::before {
+		content: "";
+		border-left: .2em solid black;
+		border-bottom: .2em solid black;
+		position: absolute;
+		width: 1.5em;
+		height: 2.5em;
+		left: -1em;
+		bottom: .8em;
+		z-index: 0;
+	}
 }
