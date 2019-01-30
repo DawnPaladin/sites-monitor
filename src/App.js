@@ -105,9 +105,6 @@ class StatLine extends Component {
 		colorName: PropTypes.string,
 		bgColor: PropTypes.string,
 	}
-	constructor(props) {
-		super(props);
-	}
 	render() {
 		return <div className="stat-line">
 			<strong>{this.props.name.toUpperCase()}: </strong>
@@ -136,38 +133,27 @@ class System extends Component {
 		this.state = {
 			servers: this.props.system.servers
 		}
-		this.serverColor = this.serverColor.bind(this);
-		this.serviceColor = this.serviceColor.bind(this);
 	}
-	// TODO: unify the next two functions
-	serviceColor() {
-		if (this.props.system.status === "up") return "green";
-		if (this.props.system.status === "down") return "red";
-		console.warn("Unexpected system status", this.props.system.status);
+	serviceColor = {
+		up: "green",
+		down: "red",
 	}
-	serverColor(opStatus) {
-		switch (opStatus) {
-			case 'enable':
-				return 'green';
-			case 'disable':
-				return 'grey';
-			case 'out-of-service-health':
-				return 'red';
-			default:
-				console.warn("Unexpected server status", opStatus);
-		}
+	serverColor = {
+		enable: "green",
+		disable: "grey",
+		"out-of-service-health": "red"
 	}
 	render() {
 		var servers = this.state.servers.map(server => (
 			<div 
-				className={ "rect " + this.serverColor(server.operational_status)}
+				className={ "rect " + this.serverColor[server.operational_status]}
 				server={server}
 				key={server.id} 
 			></div>
 		));
 		return (
 			<div className="system">
-				<div className={"circle " + this.serviceColor()}></div>
+				<div className={"circle " + this.serviceColor[this.props.system.status]}></div>
 				<div className="rects">
 					{servers}
 				</div>
