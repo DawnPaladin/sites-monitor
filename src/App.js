@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import './App.scss';
 
-var simulateDownedService = true;
+var simulateDownedService = false;
 
 class App extends Component {
 	constructor(props) {
@@ -31,7 +31,7 @@ class App extends Component {
 		service.servers.forEach(server => {
 			if (server.operational_status === 'out-of-service-health') serversDown += 1;
 		});
-		return (serversDown > 0 || true) && serversDown >= threshold;
+		return (serversDown > 0 || simulateDownedService) && serversDown >= threshold;
 	}
 	getStatus() {
 		const replaceUnderscores = string => string.replace(/_/g, ' ');
