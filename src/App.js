@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
+import CircularProgressbar from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 import './App.scss';
 
 var simulateDownedService = false;
@@ -100,6 +102,16 @@ class App extends Component {
 					<ul className="groups">
 						{groups}
 					</ul>
+					<div id="network-status">
+						<CircularProgressbar percentage={40} styles={{
+							path: { 
+								stroke: 'lime',
+								strokeLinecap: 'butt',
+								strokeDasharray: '4'
+							},
+							trail: { stroke: 'hsl(0, 0%, 10%)' },
+						}}/>
+					</div>
 				</div>
 				<div className="stats">
 					<div className="stat-line stat-line-green">

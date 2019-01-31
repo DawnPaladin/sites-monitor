@@ -18,6 +18,7 @@ html {
 
 .monitor {
 	flex-grow: 1;
+	position: relative;
 }
 
 .loading {
@@ -229,5 +230,35 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 		left: -1em;
 		bottom: .8em;
 		z-index: 0;
+	}
+}
+
+#network-status {
+	position: absolute;
+	top: .25em;
+	right: .25em;
+	@include desktop {
+		font-size: 75px;
+	}
+	width: 1em;
+	height: 1em;
+}
+
+.spinner {
+	.CircularProgressbar { display: none; }
+	border-radius: 50%;
+	border: .05em dashed lime;
+	animation-name: spin;
+	animation-duration: 3s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0turn);
+	}
+	to {
+		transform: rotate(1turn);
 	}
 }
