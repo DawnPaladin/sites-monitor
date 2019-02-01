@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import clockInterval from 'clock-interval';
 import './App.scss';
 
-const simulateDownedService = false;
-var loop;
+const simulateDownedService = true;
 
 class App extends Component {
 	constructor(props) {
@@ -34,14 +32,14 @@ class App extends Component {
 		this.getStatus = this.getStatus.bind(this);
 	}
 	componentDidMount() {
-		// this.fetchLoopController().start();
+		this.fetchLoopController().start();
 	}
 	fetchLoopController() {
+		var loop;
 		const start = () => {
 			this.setState({ loading: true });
 			this.getStatus().then(() => {
-				window.loop = clockInterval(tick);
-				console.log(loop);
+				loop = setInterval(tick, 1000);
 				this.setState({
 					loading: false,
 					timeSinceLastUpdate: 0,
@@ -49,12 +47,11 @@ class App extends Component {
 			});
 		}
 		const stop = () => {
-			console.log("stopping")
-			window.loop.cancel();
+			clearInterval(loop);
 			this.setState({ timeSinceLastUpdate: 0 });
 		}
 		const tick = () => {
-			if (this.state.timeSinceLastUpdate > 14) {
+			if (this.state.timeSinceLastUpdate > 29) {
 				stop();
 				start();
 			} else {
@@ -133,7 +130,7 @@ class App extends Component {
 			groups = <div className="loading">Loading...</div>
 		}
 		var downedServices = this.state.downedServices.map(service => <DownedService service={service} />);
-		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/60;
+		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/30;
 		return (
 			<div id="App">
 				<div className="monitor">

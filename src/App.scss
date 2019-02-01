@@ -240,8 +240,17 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	@include desktop {
 		font-size: 75px;
 	}
+	@include jumbo {
+		font-size: 75px;
+	}
 	width: 1em;
 	height: 1em;
+	box-sizing: border-box;
+}
+
+.CircularProgressbar {
+	position: absolute;
+	top: 0;
 }
 
 .spinner {
