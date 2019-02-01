@@ -27,8 +27,6 @@ class App extends Component {
 			loading: false,
 		};
 		this.fetchLoopController = this.fetchLoopController.bind(this);
-		window.fetchLoopController = this.fetchLoopController;
-		window.state = this.state;
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
 		this.getStatus = this.getStatus.bind(this);
 	}
@@ -36,19 +34,18 @@ class App extends Component {
 		this.fetchLoopController().start();
 	}
 	fetchLoopController() {
-		var loop;
 		const start = () => {
 			this.setState({ networkStatus: "loading" });
 			this.getStatus().then(() => {
-				loop = setInterval(tick, 1000);
 				this.setState({
-					networkStatus: "waiting",
+					fetchLoop: setInterval(tick, 1000),
 					timeSinceLastUpdate: 0,
+					networkStatus: "waiting",
 				});
 			});
 		}
 		const stop = () => {
-			clearInterval(loop);
+			clearInterval(this.state.fetchLoop);
 			this.setState({
 				timeSinceLastUpdate: 0,
 				networkStatus: "stopped"
