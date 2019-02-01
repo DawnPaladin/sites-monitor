@@ -2002,6 +2002,10 @@ cliui@^4.0.0:
     strip-ansi "^4.0.0"
     wrap-ansi "^2.0.0"
 
+clock-interval@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/clock-interval/-/clock-interval-1.1.0.tgz#c083fd79bfcf7a482b78b5b3142a3ce5c89172c0"
+
 clone-deep@^0.2.4:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/clone-deep/-/clone-deep-0.2.4.tgz#4e73dd09e9fb971cc38670c5dced9c1896481cc6"

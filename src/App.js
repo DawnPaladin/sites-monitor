@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import clockInterval from 'clock-interval';
 import './App.scss';
 
-var simulateDownedService = false;
+const simulateDownedService = false;
 
 class App extends Component {
 	constructor(props) {
@@ -22,10 +23,33 @@ class App extends Component {
 				down: 0,
 			},
 			downedServices: [],
+			timeSinceLastUpdate: 0,
 		};
-		this.getStatus = this.getStatus.bind(this);
+		this.fetchLoopController = this.fetchLoopController.bind(this);
+		// window.fetchLoopController = this.fetchLoopController;
+		this.fetchLoopController().start();
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
-		this.getStatus();
+		this.getStatus = this.getStatus.bind(this);
+	}
+	fetchLoopController() {
+		var loop;
+		const start = () => {
+			this.getStatus();
+			this.setState({ timeSinceLastUpdate: 0 });
+			loop = clockInterval(tick);
+		}
+		const stop = () => {
+			clearInterval(loop);
+		}
+		const tick = () => {
+			if (this.state.timeSinceLastUpdate > 59) {
+				this.getStatus();
+				this.setState({ timeSinceLastUpdate: 0 });
+			} else {
+				this.setState({ timeSinceLastUpdate: this.state.timeSinceLastUpdate + 1 });
+			}
+		}
+		return { start, stop }
 	}
 	checkIfServiceIsDown(service) {
 		let serversDown = 0;
@@ -37,7 +61,7 @@ class App extends Component {
 	}
 	getStatus() {
 		const replaceUnderscores = string => string.replace(/_/g, ' ');
-		fetch("http://proxy.hkijharris.test/getStatus.php")
+		return fetch("http://proxy.hkijharris.test/getStatus.php")
 			.then(response => response.json())
 			.then(json => {
 				var groups = json.data;
@@ -46,7 +70,7 @@ class App extends Component {
 					var nameB = groupB.id.toUpperCase();
 					if (nameA < nameB) return -1;
 					if (nameA > nameB) return 1;
-					return 0; // names must be equal
+					return 0;
 				});
 				groups.forEach(group => {
 					group.id = replaceUnderscores(group.id);
@@ -87,7 +111,7 @@ class App extends Component {
 				this.setState({ serviceStats: serviceStats, serverStats: serverStats });
 			}).catch(err => {
 				document.getElementsByClassName('loading')[0].innerHTML = err;
-			});
+			})
 		;
 	}
 	render() {
@@ -96,6 +120,7 @@ class App extends Component {
 			groups = <div className="loading">Loading...</div>
 		}
 		var downedServices = this.state.downedServices.map(service => <DownedService service={service} />);
+		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/60;
 		return (
 			<div id="App">
 				<div className="monitor">
@@ -103,7 +128,7 @@ class App extends Component {
 						{groups}
 					</ul>
 					<div id="network-status">
-						<CircularProgressbar percentage={40} styles={{
+						<CircularProgressbar percentage={progressbarPercentage} styles={{
 							path: { 
 								stroke: 'lime',
 								strokeLinecap: 'butt',
