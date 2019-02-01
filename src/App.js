@@ -4,7 +4,7 @@ import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './App.scss';
 
-const simulateDownedService = false;
+const simulateDownedService = true;
 const updateFrequency = 30; // seconds to wait between data refreshes
 
 class App extends Component {
@@ -14,7 +14,6 @@ class App extends Component {
 			groups: [],
 			serviceStats: {
 				up: 0,
-				disabled: 0,
 				down: 0,
 			},
 			serverStats: {
@@ -24,11 +23,12 @@ class App extends Component {
 			},
 			downedServices: [],
 			timeSinceLastUpdate: 0,
-			loading: false,
+			networkText: "Loading...",
 		};
 		this.fetchLoopController = this.fetchLoopController.bind(this);
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
 		this.getStatus = this.getStatus.bind(this);
+		this.handleNetworkErr = this.handleNetworkErr.bind(this);
 	}
 	componentDidMount() {
 		this.fetchLoopController().start();
@@ -73,8 +73,13 @@ class App extends Component {
 		const replaceUnderscores = string => string.replace(/_/g, ' ');
 		this.setState({ loading: true });
 		return fetch("http://proxy.hkijharris.test/getStatus.php")
-			.then(response => response.json())
-			.then(json => {
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					this.handleNetworkErr(response);
+				}
+			}).then(json => {
 				var groups = json.data;
 				groups.sort((groupA, groupB) => {
 					var nameA = groupA.id.toUpperCase();
@@ -93,7 +98,6 @@ class App extends Component {
 			}).then(groups => {
 				var serviceStats = {
 					up: 0,
-					disabled: 0,
 					down: 0,
 				}
 				var serverStats = {
@@ -101,6 +105,7 @@ class App extends Component {
 					disabled: 0,
 					down: 0,
 				}
+				this.setState({ downedServices: [] });
 				groups.forEach(group => {
 					group.virtual_services.forEach(service => {
 						if (this.checkIfServiceIsDown(service)) {
@@ -120,17 +125,23 @@ class App extends Component {
 					});
 				});
 				this.setState({ serviceStats: serviceStats, serverStats: serverStats });
-			}).catch(err => {
-				document.getElementsByClassName('loading')[0].innerHTML = err;
-			})
+			}).catch(err => this.handleNetworkErr(err))
 		;
+	}
+	handleNetworkErr(err) {
+		console.error(err);
+		this.setState({
+			networkText: err.message,
+			groups: [],
+		});
+		this.fetchLoopController().stop(); // FIXME:
 	}
 	render() {
 		var groups = this.state.groups.map((group, index) => { return <Group key={index} group={group} /> });
 		if (groups.length === 0) {
-			groups = <div className="loading-text">Loading...</div>
+			groups = <div className="network-text">{this.state.networkText}</div>
 		}
-		var downedServices = this.state.downedServices.map(service => <DownedService service={service} />);
+		var downedServices = this.state.downedServices.map(service => <DownedService service={service} key={service.id} />);
 		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/updateFrequency;
 		return (
 			<div id="App">
@@ -138,7 +149,7 @@ class App extends Component {
 					<ul className="groups">
 						{groups}
 					</ul>
-					<div id="network-status" className={this.state.networkStatus}>
+					<div id="network-status" className={this.state.networkStatus} onClick={this.fetchLoopController().stop}>
 						<CircularProgressbar percentage={progressbarPercentage} styles={{
 							path: { 
 								stroke: 'lime',
@@ -234,7 +245,7 @@ class System extends Component {
 
 class DownedService extends Component {
 	render() {
-		var servers = this.props.service.servers.map(server => <div className="server indent">
+		var servers = this.props.service.servers.map(server => <div className="server indent" key={server.id}>
 				<div className={"square " + serverColor[server.operational_status]}></div>
 				<div className="server-name">{server.id}</div>
 		</div>)
