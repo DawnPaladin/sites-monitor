@@ -36,12 +36,16 @@ class App extends Component {
 	fetchLoopController() {
 		const start = () => {
 			this.setState({ networkStatus: "loading" });
-			this.getStatus().then(() => {
-				this.setState({
-					fetchLoop: setInterval(tick, 1000),
-					timeSinceLastUpdate: 0,
-					networkStatus: "waiting",
-				});
+			this.getStatus().then((response) => {
+				if (response instanceof Error) {
+					this.handleNetworkErr(response);
+				} else {
+					this.setState({
+						fetchLoop: setInterval(tick, 1000),
+						timeSinceLastUpdate: 0,
+						networkStatus: "waiting",
+					});
+				}
 			});
 		}
 		const stop = () => {
@@ -134,7 +138,8 @@ class App extends Component {
 			networkText: err.message,
 			groups: [],
 		});
-		this.fetchLoopController().stop(); // FIXME:
+		this.fetchLoopController().stop()
+		return err;
 	}
 	render() {
 		var groups = this.state.groups.map((group, index) => { return <Group key={index} group={group} /> });
