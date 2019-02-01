@@ -6,6 +6,7 @@ import clockInterval from 'clock-interval';
 import './App.scss';
 
 const simulateDownedService = false;
+var loop;
 
 class App extends Component {
 	constructor(props) {
@@ -24,27 +25,38 @@ class App extends Component {
 			},
 			downedServices: [],
 			timeSinceLastUpdate: 0,
+			loading: false,
 		};
 		this.fetchLoopController = this.fetchLoopController.bind(this);
-		// window.fetchLoopController = this.fetchLoopController;
-		this.fetchLoopController().start();
+		window.fetchLoopController = this.fetchLoopController;
+		window.state = this.state;
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
 		this.getStatus = this.getStatus.bind(this);
 	}
+	componentDidMount() {
+		// this.fetchLoopController().start();
+	}
 	fetchLoopController() {
-		var loop;
 		const start = () => {
-			this.getStatus();
-			this.setState({ timeSinceLastUpdate: 0 });
-			loop = clockInterval(tick);
+			this.setState({ loading: true });
+			this.getStatus().then(() => {
+				window.loop = clockInterval(tick);
+				console.log(loop);
+				this.setState({
+					loading: false,
+					timeSinceLastUpdate: 0,
+				});
+			});
 		}
 		const stop = () => {
-			clearInterval(loop);
+			console.log("stopping")
+			window.loop.cancel();
+			this.setState({ timeSinceLastUpdate: 0 });
 		}
 		const tick = () => {
-			if (this.state.timeSinceLastUpdate > 59) {
-				this.getStatus();
-				this.setState({ timeSinceLastUpdate: 0 });
+			if (this.state.timeSinceLastUpdate > 14) {
+				stop();
+				start();
 			} else {
 				this.setState({ timeSinceLastUpdate: this.state.timeSinceLastUpdate + 1 });
 			}
@@ -61,6 +73,7 @@ class App extends Component {
 	}
 	getStatus() {
 		const replaceUnderscores = string => string.replace(/_/g, ' ');
+		this.setState({ loading: true });
 		return fetch("http://proxy.hkijharris.test/getStatus.php")
 			.then(response => response.json())
 			.then(json => {
@@ -127,14 +140,18 @@ class App extends Component {
 					<ul className="groups">
 						{groups}
 					</ul>
-					<div id="network-status">
+					<div id="network-status" className={this.state.loading ? "spinner" : ""}>
 						<CircularProgressbar percentage={progressbarPercentage} styles={{
 							path: { 
 								stroke: 'lime',
+								strokeWidth: '.05em',
 								strokeLinecap: 'butt',
 								strokeDasharray: '4'
 							},
-							trail: { stroke: 'hsl(0, 0%, 10%)' },
+							trail: {
+								stroke: 'hsl(0, 0%, 10%)',
+								strokeWidth: '0.05em',
+							},
 						}}/>
 					</div>
 				</div>
