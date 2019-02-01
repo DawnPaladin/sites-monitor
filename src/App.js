@@ -4,7 +4,8 @@ import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './App.scss';
 
-const simulateDownedService = true;
+const simulateDownedService = false;
+const updateFrequency = 30; // seconds to wait between data refreshes
 
 class App extends Component {
 	constructor(props) {
@@ -37,21 +38,24 @@ class App extends Component {
 	fetchLoopController() {
 		var loop;
 		const start = () => {
-			this.setState({ loading: true });
+			this.setState({ networkStatus: "loading" });
 			this.getStatus().then(() => {
 				loop = setInterval(tick, 1000);
 				this.setState({
-					loading: false,
+					networkStatus: "waiting",
 					timeSinceLastUpdate: 0,
 				});
 			});
 		}
 		const stop = () => {
 			clearInterval(loop);
-			this.setState({ timeSinceLastUpdate: 0 });
+			this.setState({
+				timeSinceLastUpdate: 0,
+				networkStatus: "stopped"
+			});
 		}
 		const tick = () => {
-			if (this.state.timeSinceLastUpdate > 29) {
+			if (this.state.timeSinceLastUpdate > updateFrequency - 1) {
 				stop();
 				start();
 			} else {
@@ -127,17 +131,17 @@ class App extends Component {
 	render() {
 		var groups = this.state.groups.map((group, index) => { return <Group key={index} group={group} /> });
 		if (groups.length === 0) {
-			groups = <div className="loading">Loading...</div>
+			groups = <div className="loading-text">Loading...</div>
 		}
 		var downedServices = this.state.downedServices.map(service => <DownedService service={service} />);
-		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/30;
+		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/updateFrequency;
 		return (
 			<div id="App">
 				<div className="monitor">
 					<ul className="groups">
 						{groups}
 					</ul>
-					<div id="network-status" className={this.state.loading ? "spinner" : ""}>
+					<div id="network-status" className={this.state.networkStatus}>
 						<CircularProgressbar percentage={progressbarPercentage} styles={{
 							path: { 
 								stroke: 'lime',
