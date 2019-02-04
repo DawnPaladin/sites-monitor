@@ -4,8 +4,9 @@ import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './App.scss';
 
-const simulateDownedService = true;
+const dataUrl = "http://proxy.hkijharris.test/getStatus.php";
 const updateFrequency = 30; // seconds to wait between data refreshes
+const simulateDownedService = false;
 
 class App extends Component {
 	constructor(props) {
@@ -75,7 +76,7 @@ class App extends Component {
 	getStatus() {
 		const replaceUnderscores = string => string.replace(/_/g, ' ');
 		this.setState({ loading: true });
-		return fetch("http://proxy.hkijharris.test/getStatus.php")
+		return fetch(dataUrl)
 			.then(response => {
 				if (response.ok) {
 					return response.json();
