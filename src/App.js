@@ -39,13 +39,12 @@ class App extends Component {
 			this.getStatus().then((response) => {
 				if (response instanceof Error) {
 					this.handleNetworkErr(response);
-				} else {
-					this.setState({
-						fetchLoop: setInterval(tick, 1000),
-						timeSinceLastUpdate: 0,
-						networkStatus: "waiting",
-					});
 				}
+				this.setState({
+					fetchLoop: setInterval(tick, 1000),
+					timeSinceLastUpdate: 0,
+					networkStatus: "waiting",
+				});
 			});
 		}
 		const stop = () => {
@@ -71,7 +70,7 @@ class App extends Component {
 		service.servers.forEach(server => {
 			if (server.operational_status === 'out-of-service-health') serversDown += 1;
 		});
-		return (serversDown > 0 || simulateDownedService) && serversDown >= threshold;
+		return serversDown > 0 && serversDown >= threshold;
 	}
 	getStatus() {
 		const replaceUnderscores = string => string.replace(/_/g, ' ');
@@ -110,6 +109,7 @@ class App extends Component {
 					down: 0,
 				}
 				this.setState({ downedServices: [] });
+				if (simulateDownedService) groups[8].virtual_services[2].servers[1].operational_status = "out-of-service-health";
 				groups.forEach(group => {
 					group.virtual_services.forEach(service => {
 						if (this.checkIfServiceIsDown(service)) {
@@ -138,7 +138,6 @@ class App extends Component {
 			networkText: err.message,
 			groups: [],
 		});
-		this.fetchLoopController().stop()
 		return err;
 	}
 	render() {
