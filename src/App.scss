@@ -185,7 +185,6 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	background: hsl(0, 100%, 80%);
 	@include scan-lines(0.25);
 	z-index: -1;
-	padding-bottom: 1em;
 }
 .downed-services {
 	color: black;
@@ -204,6 +203,9 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	.square {
 		height: 1.3em;
 		width: 1.3em;
+	}
+	.downed-service {
+		padding-bottom: 1em;
 	}
 	.downed-service-name, .server-name {
 		position: relative;
