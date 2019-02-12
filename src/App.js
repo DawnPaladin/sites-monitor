@@ -4,7 +4,8 @@ import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './App.scss';
 
-const dataUrl = "http://proxy.hkijharris.test/getStatus.php";
+const loadBalancerUrl = "http://proxy.hkijharris.test/getStatus.php";
+const jenkinsUrl = "http://proxy.hkijharris.test/jenkins.php";
 const updateFrequency = 30; // seconds to wait between data refreshes
 const simulateDownedService = false;
 
@@ -12,7 +13,8 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			groups: [],
+			groups: [],   // these two contain the same data,
+			services: [], // just organized differently
 			serviceStats: {
 				up: 0,
 				down: 0,
@@ -28,7 +30,8 @@ class App extends Component {
 		};
 		this.fetchLoopController = this.fetchLoopController.bind(this);
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
-		this.getStatus = this.getStatus.bind(this);
+		this.getLoadBalancerStatus = this.getLoadBalancerStatus.bind(this);
+		this.getJenkinsStatus = this.getJenkinsStatus.bind(this);
 		this.handleNetworkErr = this.handleNetworkErr.bind(this);
 	}
 	componentDidMount() {
@@ -37,7 +40,7 @@ class App extends Component {
 	fetchLoopController() {
 		const start = () => {
 			this.setState({ networkStatus: "loading" });
-			this.getStatus().then((response) => {
+			this.getLoadBalancerStatus().then((response) => {
 				if (response instanceof Error) {
 					this.handleNetworkErr(response);
 				}
@@ -46,7 +49,7 @@ class App extends Component {
 					timeSinceLastUpdate: 0,
 					networkStatus: "waiting",
 				});
-			});
+			}).then(this.getJenkinsStatus);
 		}
 		const stop = () => {
 			clearInterval(this.state.fetchLoop);
@@ -73,10 +76,10 @@ class App extends Component {
 		});
 		return serversDown > 0 && serversDown >= threshold;
 	}
-	getStatus() {
+	getLoadBalancerStatus() {
 		const replaceUnderscores = string => string.replace(/_/g, ' ');
-		this.setState({ loading: true });
-		return fetch(dataUrl)
+		this.setState({ loading: true, services: [] });
+		return fetch(loadBalancerUrl)
 			.then(response => {
 				if (response.ok) {
 					return response.json();
@@ -94,7 +97,10 @@ class App extends Component {
 				});
 				groups.forEach(group => {
 					group.id = replaceUnderscores(group.id);
-					group.virtual_services.forEach(service => service.id = replaceUnderscores(service.id));
+					group.virtual_services.forEach(service => {
+						service.id = replaceUnderscores(service.id);
+						this.setState({ services: [...this.state.services, service]});
+					});
 				});
 				console.log(groups);
 				this.setState({groups: groups});
@@ -131,6 +137,27 @@ class App extends Component {
 				});
 				this.setState({ serviceStats: serviceStats, serverStats: serverStats });
 			}).catch(err => this.handleNetworkErr(err))
+		;
+	}
+	getJenkinsStatus() {
+		return fetch(jenkinsUrl)
+			.then(response => {
+				if (response.ok) {
+					return response.json();
+				} else {
+					this.handleNetworkErr(response);
+				}
+			}).then(jobs => {
+				// match jobs from Jenkins with services from Load Balancer
+				let jobNames = Object.keys(jobs);
+				jobNames.forEach(jobName => {
+					this.state.services.forEach(service => {
+						if (jobName === service.id) {
+							service.jenkinsData = jobs[jobName];
+						}
+					})
+				})
+			})
 		;
 	}
 	handleNetworkErr(err) {
