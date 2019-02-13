@@ -13,8 +13,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			groups: [],   // these two contain the same data,
-			services: [], // just organized differently
+			groups: [],
 			serviceStats: {
 				up: 0,
 				down: 0,
@@ -40,16 +39,19 @@ class App extends Component {
 	fetchLoopController() {
 		const start = () => {
 			this.setState({ networkStatus: "loading" });
-			this.getLoadBalancerStatus().then((response) => {
-				if (response instanceof Error) {
-					this.handleNetworkErr(response);
-				}
-				this.setState({
-					fetchLoop: setInterval(tick, 1000),
-					timeSinceLastUpdate: 0,
-					networkStatus: "waiting",
-				});
-			}).then(this.getJenkinsStatus);
+			this.getLoadBalancerStatus()
+				.then(this.getJenkinsStatus)
+				.then((response) => {
+					if (response instanceof Error) {
+						this.handleNetworkErr(response);
+					}
+					this.setState({
+						fetchLoop: setInterval(tick, 1000),
+						timeSinceLastUpdate: 0,
+						networkStatus: "waiting",
+					});
+				})
+			;
 		}
 		const stop = () => {
 			clearInterval(this.state.fetchLoop);
@@ -99,7 +101,6 @@ class App extends Component {
 					group.id = replaceUnderscores(group.id);
 					group.virtual_services.forEach(service => {
 						service.id = replaceUnderscores(service.id);
-						this.setState({ services: [...this.state.services, service]});
 					});
 				});
 				console.log(groups);
@@ -149,14 +150,32 @@ class App extends Component {
 				}
 			}).then(jobs => {
 				// match jobs from Jenkins with services from Load Balancer
-				let jobNames = Object.keys(jobs);
-				jobNames.forEach(jobName => {
-					this.state.services.forEach(service => {
-						if (jobName === service.id) {
-							service.jenkinsData = jobs[jobName];
+				this.setState(function(state) {
+					const groups = state.groups;
+					const unmatchedJobs = [];
+					const textInBrackets = /\[(.+)\]/;
+					while (jobs.length > 0) {
+						const job = jobs.pop();
+						let jobMatched = false;
+						for (let i = 0; i < groups.length && !jobMatched; i++) { // for each group
+							const group = groups[i];
+							for (let j = 0; j < group.virtual_services.length && !jobMatched; j++) { // for each service in group
+								const service = group.virtual_services[j];
+								const regexResult = textInBrackets.exec(job.description);
+								const regexMatches = regexResult && regexResult[1] === service.id;
+								if (job.name === service.id || regexMatches ) {
+									console.log("Matched job", job, service);
+									service.jenkinsData = job;
+									jobMatched = true;
+								}
+							}
 						}
-					})
-				})
+						if (!jobMatched) {
+							unmatchedJobs.push(job);
+						}
+					}
+					console.log("Unmatched jobs", unmatchedJobs);
+				});
 			})
 		;
 	}
@@ -253,8 +272,24 @@ class System extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			servers: this.props.system.servers
+			servers: this.props.system.servers,
+			system: this.props.system,
 		}
+		this.formatTimeAgo = this.formatTimeAgo.bind(this);
+	}
+	formatTimeAgo(timestamp) {
+		if (isNaN(timestamp)) return '';
+		
+		var seconds = Math.floor((new Date() - timestamp) / 1000);
+		
+		// hours
+		var interval = Math.floor(seconds / 3600);
+		if (interval > 1) return `${interval}h`;
+		// minutes
+		interval = Math.floor(seconds / 60);
+		if (interval > 1) return `${interval}m`;
+		// seconds
+		return `${seconds}s`;
 	}
 	render() {
 		var servers = this.state.servers.map(server => (
@@ -265,11 +300,12 @@ class System extends Component {
 			></div>
 		));
 		return (
-			<div className="system">
+			<div className="system" title={this.props.system.id}>
 				<div className={"circle " + serviceColor[this.props.system.status]}></div>
 				<div className="rects">
 					{servers}
 				</div>
+				<div className='build-viz'>{this.formatTimeAgo(this.props.system.jenkinsData && this.props.system.jenkinsData.builds[0].timestamp)}</div>
 			</div>
 		)
 	}

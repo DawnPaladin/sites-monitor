@@ -105,7 +105,8 @@ html {
 	position: relative;
 	margin-left: .25em;
 	margin-bottom: -.1em;
-	width: 1em;
+	min-width: 1em;
+	height: 1.25em;
 }
 
 .rects {
@@ -115,6 +116,13 @@ html {
 	left: 0;
 	bottom: 0;
 	right: 0;
+	width: 1em;
+}
+
+.build-viz {
+	position: relative;
+	left: 1.1em;
+	margin-right: 1.2em;
 }
 
 $thick-border: .1em solid rgba(0, 0, 0, .75);
@@ -249,6 +257,17 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	width: 1em;
 	height: 1em;
 	box-sizing: border-box;
+	cursor: pointer;
+	&.waiting:hover::before {
+		content: '';
+		display: block;
+		position: relative;
+		width: .3em;
+		height: .3em;
+		left: calc(50% - .3em/2);
+		top: calc(50% - .3em/2);
+		background: darkred;
+	}
 }
 
 .CircularProgressbar {
