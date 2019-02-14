@@ -141,6 +141,12 @@ class App extends Component {
 		;
 	}
 	getJenkinsStatus() {
+		const parenthesizeLastWord = phrase => { // put parens around the last word in a phrase
+			let arr = phrase.split(' ');
+			let lastWord = arr.pop();
+			arr.push(`(${lastWord})`);
+			return arr.join(' ');
+		}
 		return fetch(jenkinsUrl)
 			.then(response => {
 				if (response.ok) {
@@ -163,7 +169,13 @@ class App extends Component {
 								const service = group.virtual_services[j];
 								const regexResult = textInBrackets.exec(job.description);
 								const regexMatches = regexResult && regexResult[1] === service.id;
-								if (job.name === service.id || regexMatches ) {
+								if (
+									job.name === service.id || 
+									job.name === parenthesizeLastWord(service.id) || 
+									job.name === service.id.replace('UAT', 'Staging') ||
+									job.name === service.id.replace('UAT', '(Staging)') || 
+									regexMatches 
+								) {
 									console.log("Matched job", job, service);
 									service.jenkinsData = job;
 									jobMatched = true;
