@@ -160,6 +160,7 @@ class App extends Component {
 					const groups = state.groups;
 					const unmatchedJobs = [];
 					const textInBrackets = /\[(.+)\]/;
+					var jobsMatched = 0;
 					while (jobs.length > 0) {
 						const job = jobs.pop();
 						let jobMatched = false;
@@ -176,9 +177,10 @@ class App extends Component {
 									job.name === service.id.replace('UAT', '(Staging)') || 
 									regexMatches 
 								) {
-									console.log("Matched job", job, service);
+									// console.log("Matched service", service.id, "with job", job.name);
 									service.jenkinsData = job;
 									jobMatched = true;
+									jobsMatched += 1;
 								}
 							}
 						}
@@ -186,7 +188,8 @@ class App extends Component {
 							unmatchedJobs.push(job);
 						}
 					}
-					console.log("Unmatched jobs", unmatchedJobs);
+					console.log("Matched", jobsMatched, "jobs");
+					console.log("Unmatched jobs", unmatchedJobs.map(job => job.name));
 				});
 			})
 		;
@@ -311,13 +314,18 @@ class System extends Component {
 				key={server.id} 
 			></div>
 		));
+		var buildVizClasses = "build-viz";
+		if (this.props.system.jenkinsData && this.props.system.jenkinsData.builds[0].result === "SUCCESS") buildVizClasses += " green-text";
+		if (this.props.system.jenkinsData && this.props.system.jenkinsData.builds[0].result === "FAILURE") buildVizClasses += " red-text";
 		return (
 			<div className="system" title={this.props.system.id}>
 				<div className={"circle " + serviceColor[this.props.system.status]}></div>
 				<div className="rects">
 					{servers}
 				</div>
-				<div className='build-viz'>{this.formatTimeAgo(this.props.system.jenkinsData && this.props.system.jenkinsData.builds[0].timestamp)}</div>
+				<div className={buildVizClasses}>
+					{this.formatTimeAgo(this.props.system.jenkinsData && this.props.system.jenkinsData.builds[0].timestamp)}
+				</div>
 			</div>
 		)
 	}

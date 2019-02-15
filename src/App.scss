@@ -59,6 +59,15 @@ html {
 .grey {
 	background: rgb(111,111,111);
 }
+.green-text {
+	color: rgb(0, 255, 0);
+}
+.red-text {
+	color: rgb(255, 20, 20);
+}
+.grey-text {
+	color: rgb(111,111,111);
+}
 
 .square {
 	display: inline-block;
@@ -257,7 +266,9 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	width: 1em;
 	height: 1em;
 	box-sizing: border-box;
-	cursor: pointer;
+	&.waiting {
+		cursor: pointer;
+	}
 	&.waiting:hover::before {
 		content: '';
 		display: block;
