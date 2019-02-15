@@ -165,6 +165,7 @@ class App extends Component {
 					while (jobs.length > 0) {
 						const job = jobs.pop();
 						let jobMatched = false;
+						if (job.color === "disabled") continue;
 						groups.forEach(group => { // eslint-disable-line
 							group.virtual_services.forEach(service => {
 								let matches;
@@ -173,7 +174,6 @@ class App extends Component {
 									regexResults.push(matches[1]);
 								}
 								const serviceIdInJobDescription = regexResults && regexResults.some(result => result === service.id);
-								// if (job.name==="Master IPM 1.8.2 (Production)" && service.id==="Canada") debugger;
 								if (
 									job.name === service.id || 
 									job.name === parenthesizeLastWord(service.id) || 
