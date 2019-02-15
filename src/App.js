@@ -8,6 +8,7 @@ const loadBalancerUrl = "http://proxy.hkijharris.test/getStatus.php";
 const jenkinsUrl = "http://proxy.hkijharris.test/jenkins.php";
 const updateFrequency = 30; // seconds to wait between data refreshes
 const simulateDownedService = false;
+const debugJenkins = false;
 
 class App extends Component {
 	constructor(props) {
@@ -103,7 +104,7 @@ class App extends Component {
 						service.id = replaceUnderscores(service.id);
 					});
 				});
-				console.log(groups);
+				if (debugJenkins) console.log(groups);
 				this.setState({groups: groups});
 				return groups;
 			}).then(groups => {
@@ -184,7 +185,7 @@ class App extends Component {
 									// console.log("Matched service", service.id, "with job", job.name);
 									service.jenkinsJobs.push(job);
 									jobMatched = true;
-									jobsMatched += 1;
+									if (debugJenkins) { jobsMatched += 1; }
 								}
 							});
 						});
@@ -192,8 +193,10 @@ class App extends Component {
 							unmatchedJobs.push(job);
 						}
 					}
-					console.log("Matched", jobsMatched, "jobs");
-					console.log("Unmatched jobs", unmatchedJobs.map(job => job.name));
+					if (debugJenkins) {
+						console.log("Matched", jobsMatched, "Jenkins jobs with Load Balancer services");
+						console.log("Unmatched jobs:", unmatchedJobs.map(job => job.name));
+					}
 				});
 			})
 		;
@@ -295,6 +298,7 @@ class System extends Component {
 			system: this.props.system,
 		}
 		this.formatTimeAgo = this.formatTimeAgo.bind(this);
+		this.notTooLongAgo = this.notTooLongAgo.bind(this);
 	}
 	formatTimeAgo(timestamp) {
 		if (isNaN(timestamp)) return '';
@@ -310,6 +314,12 @@ class System extends Component {
 		// seconds
 		return `${seconds}s`;
 	}
+	notTooLongAgo(timestamp) {
+		var now = new Date();
+		var currentTimestamp = now.valueOf();
+		const eightHours = 1000 * 60 * 60 * 8;
+		return (currentTimestamp - timestamp) < eightHours;
+	}
 	render() {
 		var servers = this.state.servers.map(server => (
 			<div 
@@ -319,13 +329,18 @@ class System extends Component {
 				title={server.id}
 			></div>
 		));
-		var jenkinsBuilds = this.props.system.jenkinsJobs && this.props.system.jenkinsJobs.map(job => {
+		var jenkinsBuilds = [];
+		if (this.props.system.jenkinsJobs) jenkinsBuilds = this.props.system.jenkinsJobs.map(job => {
 			var buildVizClasses = "build-viz";
 			if (job.builds[0].result === "SUCCESS") buildVizClasses += " green-text";
 			if (job.builds[0].result === "FAILURE") buildVizClasses += " red-text";
-			return (<div className={buildVizClasses} key={job.name} title={"Jenkins job: " + job.name}>
-				{this.formatTimeAgo(job.builds[0].timestamp)}
-			</div>);
+			if (this.notTooLongAgo(job.builds[0].timestamp) || debugJenkins) {
+				return (<div className={buildVizClasses} key={job.name} title={"Jenkins job: " + job.name}>
+					{this.formatTimeAgo(job.builds[0].timestamp)}
+				</div>);
+			} else {
+				return <div key={job.name}></div>
+			}
 		});
 		return (
 			<div className="system">
