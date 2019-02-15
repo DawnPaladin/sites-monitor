@@ -128,6 +128,7 @@ class App extends Component {
 							service.status = "up";
 							serviceStats.up += 1;
 						}
+						service.jenkinsJobs = [];
 						service.servers.forEach(server => {
 							if (server.operational_status === "enable") { serverStats.up += 1; } 
 							else if (server.operational_status === "disable") { serverStats.disabled += 1; }
@@ -159,31 +160,34 @@ class App extends Component {
 				this.setState(function(state) {
 					const groups = state.groups;
 					const unmatchedJobs = [];
-					const textInBrackets = /\[(.+)\]/;
-					var jobsMatched = 0;
+					const textInBrackets = /\[(.+?)\]/g;
+					let jobsMatched = 0;
 					while (jobs.length > 0) {
 						const job = jobs.pop();
 						let jobMatched = false;
-						for (let i = 0; i < groups.length && !jobMatched; i++) { // for each group
-							const group = groups[i];
-							for (let j = 0; j < group.virtual_services.length && !jobMatched; j++) { // for each service in group
-								const service = group.virtual_services[j];
-								const regexResult = textInBrackets.exec(job.description);
-								const regexMatches = regexResult && regexResult[1] === service.id;
+						groups.forEach(group => { // eslint-disable-line
+							group.virtual_services.forEach(service => {
+								let matches;
+								const regexResults = [];
+								while (matches = textInBrackets.exec(job.description)) { // eslint-disable-line
+									regexResults.push(matches[1]);
+								}
+								const serviceIdInJobDescription = regexResults && regexResults.some(result => result === service.id);
+								// if (job.name==="Master IPM 1.8.2 (Production)" && service.id==="Canada") debugger;
 								if (
 									job.name === service.id || 
 									job.name === parenthesizeLastWord(service.id) || 
 									job.name === service.id.replace('UAT', 'Staging') ||
 									job.name === service.id.replace('UAT', '(Staging)') || 
-									regexMatches 
+									serviceIdInJobDescription 
 								) {
 									// console.log("Matched service", service.id, "with job", job.name);
-									service.jenkinsData = job;
+									service.jenkinsJobs.push(job);
 									jobMatched = true;
 									jobsMatched += 1;
 								}
-							}
-						}
+							});
+						});
 						if (!jobMatched) {
 							unmatchedJobs.push(job);
 						}
@@ -311,20 +315,26 @@ class System extends Component {
 			<div 
 				className={ "rect " + serverColor[server.operational_status]}
 				server={server}
-				key={server.id} 
+				key={server.id}
+				title={server.id}
 			></div>
 		));
-		var buildVizClasses = "build-viz";
-		if (this.props.system.jenkinsData && this.props.system.jenkinsData.builds[0].result === "SUCCESS") buildVizClasses += " green-text";
-		if (this.props.system.jenkinsData && this.props.system.jenkinsData.builds[0].result === "FAILURE") buildVizClasses += " red-text";
+		var jenkinsBuilds = this.props.system.jenkinsJobs && this.props.system.jenkinsJobs.map(job => {
+			var buildVizClasses = "build-viz";
+			if (job.builds[0].result === "SUCCESS") buildVizClasses += " green-text";
+			if (job.builds[0].result === "FAILURE") buildVizClasses += " red-text";
+			return (<div className={buildVizClasses} key={job.name} title={"Jenkins job: " + job.name}>
+				{this.formatTimeAgo(job.builds[0].timestamp)}
+			</div>);
+		});
 		return (
-			<div className="system" title={this.props.system.id}>
-				<div className={"circle " + serviceColor[this.props.system.status]}></div>
+			<div className="system">
+				<div title={this.props.system.id} className={"circle " + serviceColor[this.props.system.status]}></div>
 				<div className="rects">
 					{servers}
 				</div>
-				<div className={buildVizClasses}>
-					{this.formatTimeAgo(this.props.system.jenkinsData && this.props.system.jenkinsData.builds[0].timestamp)}
+				<div className="builds">
+					{jenkinsBuilds}
 				</div>
 			</div>
 		)

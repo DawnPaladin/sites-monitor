@@ -128,10 +128,18 @@ html {
 	width: 1em;
 }
 
+.builds {
+	margin-left: 1.1em;
+}
 .build-viz {
+	display: inline-block;
 	position: relative;
-	left: 1.1em;
-	margin-right: 1.2em;
+}
+.build-viz:not(:last-child) {
+	&::after {
+		content: ', ';
+		margin-right: .2em;
+	}
 }
 
 $thick-border: .1em solid rgba(0, 0, 0, .75);
