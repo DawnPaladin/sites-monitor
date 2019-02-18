@@ -32,6 +32,8 @@ class App extends Component {
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
 		this.getLoadBalancerStatus = this.getLoadBalancerStatus.bind(this);
 		this.getJenkinsStatus = this.getJenkinsStatus.bind(this);
+		this.processLoadBalancerData = this.processLoadBalancerData.bind(this);
+		this.processJenkinsData = this.processJenkinsData.bind(this);
 		this.handleNetworkErr = this.handleNetworkErr.bind(this);
 	}
 	componentDidMount() {
@@ -40,19 +42,21 @@ class App extends Component {
 	fetchLoopController() {
 		const start = () => {
 			this.setState({ networkStatus: "loading" });
-			this.getLoadBalancerStatus()
-				.then(this.getJenkinsStatus)
-				.then((response) => {
-					if (response instanceof Error) {
-						this.handleNetworkErr(response);
-					}
-					this.setState({
-						fetchLoop: setInterval(tick, 1000),
-						timeSinceLastUpdate: 0,
-						networkStatus: "waiting",
-					});
-				})
-			;
+			Promise.all([ this.getLoadBalancerStatus(), this.getJenkinsStatus() ]).then((response) => {
+				if (response instanceof Error) {
+					this.handleNetworkErr(response);
+				}
+				const loadBalancerData = response[0];
+				const jenkinsData = response[1];
+				this.processLoadBalancerData(loadBalancerData, () => {
+					this.processJenkinsData(jenkinsData);
+				});
+				this.setState({
+					fetchLoop: setInterval(tick, 1000),
+					timeSinceLastUpdate: 0,
+					networkStatus: "waiting",
+				});
+			});
 		}
 		const stop = () => {
 			clearInterval(this.state.fetchLoop);
@@ -80,8 +84,6 @@ class App extends Component {
 		return serversDown > 0 && serversDown >= threshold;
 	}
 	getLoadBalancerStatus() {
-		const replaceUnderscores = string => string.replace(/_/g, ' ');
-		this.setState({ loading: true, services: [] });
 		return fetch(loadBalancerUrl)
 			.then(response => {
 				if (response.ok) {
@@ -89,117 +91,121 @@ class App extends Component {
 				} else {
 					this.handleNetworkErr(response);
 				}
-			}).then(json => {
-				var groups = json.data;
-				groups.sort((groupA, groupB) => {
-					var nameA = groupA.id.toUpperCase();
-					var nameB = groupB.id.toUpperCase();
-					if (nameA < nameB) return -1;
-					if (nameA > nameB) return 1;
-					return 0;
-				});
-				groups.forEach(group => {
-					group.id = replaceUnderscores(group.id);
-					group.virtual_services.forEach(service => {
-						service.id = replaceUnderscores(service.id);
-					});
-				});
-				if (debugJenkins) console.log(groups);
-				this.setState({groups: groups});
-				return groups;
-			}).then(groups => {
-				var serviceStats = {
-					up: 0,
-					down: 0,
-				}
-				var serverStats = {
-					up: 0,
-					disabled: 0,
-					down: 0,
-				}
-				this.setState({ downedServices: [] });
-				if (simulateDownedService) groups[8].virtual_services[2].servers[1].operational_status = "out-of-service-health";
-				groups.forEach(group => {
-					group.virtual_services.forEach(service => {
-						if (this.checkIfServiceIsDown(service)) {
-							service.status = "down";
-							serviceStats.down += 1;
-							this.setState({ downedServices: [...this.state.downedServices, service] });
-						} else {
-							service.status = "up";
-							serviceStats.up += 1;
-						}
-						service.jenkinsJobs = [];
-						service.servers.forEach(server => {
-							if (server.operational_status === "enable") { serverStats.up += 1; } 
-							else if (server.operational_status === "disable") { serverStats.disabled += 1; }
-							else if (server.operational_status === "out-of-service-health") { serverStats.down += 1; }
-							else { console.warn("Unexpected server status", server.operational_status); }
-						});
-					});
-				});
-				this.setState({ serviceStats: serviceStats, serverStats: serverStats });
-			}).catch(err => this.handleNetworkErr(err))
+			})
 		;
 	}
-	getJenkinsStatus() {
+	processLoadBalancerData(json, callback) {
+		const replaceUnderscores = string => string.replace(/_/g, ' ');
+		this.setState({ loading: true });
+
+		var groups = json.data;
+		groups.sort((groupA, groupB) => {
+			var nameA = groupA.id.toUpperCase();
+			var nameB = groupB.id.toUpperCase();
+			if (nameA < nameB) return -1;
+			if (nameA > nameB) return 1;
+			return 0;
+		});
+		groups.forEach(group => {
+			group.id = replaceUnderscores(group.id);
+			group.virtual_services.forEach(service => {
+				service.id = replaceUnderscores(service.id);
+			});
+		});
+		if (debugJenkins) console.log(groups);
+		this.setState({groups: groups});
+
+		var serviceStats = {
+			up: 0,
+			down: 0,
+		}
+		var serverStats = {
+			up: 0,
+			disabled: 0,
+			down: 0,
+		}
+		this.setState({ downedServices: [] });
+		if (simulateDownedService) groups[8].virtual_services[2].servers[1].operational_status = "out-of-service-health";
+		groups.forEach(group => {
+			group.virtual_services.forEach(service => {
+				if (this.checkIfServiceIsDown(service)) {
+					service.status = "down";
+					serviceStats.down += 1;
+					this.setState({ downedServices: [...this.state.downedServices, service] });
+				} else {
+					service.status = "up";
+					serviceStats.up += 1;
+				}
+				service.jenkinsJobs = [];
+				service.servers.forEach(server => {
+					if (server.operational_status === "enable") { serverStats.up += 1; } 
+					else if (server.operational_status === "disable") { serverStats.disabled += 1; }
+					else if (server.operational_status === "out-of-service-health") { serverStats.down += 1; }
+					else { console.warn("Unexpected server status", server.operational_status); }
+				});
+			});
+		});
+			
+		this.setState({ serviceStats: serviceStats, serverStats: serverStats }, callback);
+	}
+	getJenkinsStatus() { // FIXME: Doesn't notice CORS ererors
+		return fetch(jenkinsUrl)
+		.then(response => {
+			if (response.ok) {
+				return response.json();
+			} else {
+				this.handleNetworkErr(response);
+			}
+		});
+	}
+	processJenkinsData(jobs) {
 		const parenthesizeLastWord = phrase => { // put parens around the last word in a phrase
 			let arr = phrase.split(' ');
 			let lastWord = arr.pop();
 			arr.push(`(${lastWord})`);
 			return arr.join(' ');
 		}
-		return fetch(jenkinsUrl)
-			.then(response => {
-				if (response.ok) {
-					return response.json();
-				} else {
-					this.handleNetworkErr(response);
-				}
-			}).then(jobs => {
-				// match jobs from Jenkins with services from Load Balancer
-				this.setState(function(state) {
-					const groups = state.groups;
-					const unmatchedJobs = [];
-					const textInBrackets = /\[(.+?)\]/g;
-					let jobsMatched = 0;
-					while (jobs.length > 0) {
-						const job = jobs.pop();
-						let jobMatched = false;
-						if (job.color === "disabled") continue;
-						groups.forEach(group => { // eslint-disable-line
-							group.virtual_services.forEach(service => {
-								let matches;
-								const regexResults = [];
-								while (matches = textInBrackets.exec(job.description)) { // eslint-disable-line
-									regexResults.push(matches[1]);
-								}
-								const serviceIdInJobDescription = regexResults && regexResults.some(result => result === service.id);
-								if (
-									job.name === service.id || 
-									job.name === parenthesizeLastWord(service.id) || 
-									job.name === service.id.replace('UAT', 'Staging') ||
-									job.name === service.id.replace('UAT', '(Staging)') || 
-									serviceIdInJobDescription 
-								) {
-									// console.log("Matched service", service.id, "with job", job.name);
-									service.jenkinsJobs.push(job);
-									jobMatched = true;
-									if (debugJenkins) { jobsMatched += 1; }
-								}
-							});
-						});
-						if (!jobMatched) {
-							unmatchedJobs.push(job);
+		// match jobs from Jenkins with services from Load Balancer
+		this.setState(function(state) {
+			const groups = state.groups;
+			const unmatchedJobs = [];
+			const textInBrackets = /\[(.+?)\]/g;
+			let jobsMatched = 0;
+			while (jobs.length > 0) {
+				const job = jobs.pop();
+				let jobMatched = false;
+				if (job.color === "disabled") continue;
+				groups.forEach(group => { // eslint-disable-line
+					group.virtual_services.forEach(service => {
+						let matches;
+						const regexResults = [];
+						while (matches = textInBrackets.exec(job.description)) { // eslint-disable-line
+							regexResults.push(matches[1]);
 						}
-					}
-					if (debugJenkins) {
-						console.log("Matched", jobsMatched, "Jenkins jobs with Load Balancer services");
-						console.log("Unmatched jobs:", unmatchedJobs.map(job => job.name));
-					}
+						const serviceIdInJobDescription = regexResults && regexResults.some(result => result === service.id);
+						if (
+							job.name === service.id || 
+							job.name === parenthesizeLastWord(service.id) || 
+							job.name === service.id.replace('UAT', 'Staging') ||
+							job.name === service.id.replace('UAT', '(Staging)') || 
+							serviceIdInJobDescription 
+						) {
+							// console.log("Matched service", service.id, "with job", job.name);
+							service.jenkinsJobs.push(job);
+							jobMatched = true;
+							if (debugJenkins) { jobsMatched += 1; }
+						}
+					});
 				});
-			})
-		;
+				if (!jobMatched) {
+					unmatchedJobs.push(job);
+				}
+			}
+			if (debugJenkins) {
+				console.log("Matched", jobsMatched, "Jenkins jobs with Load Balancer services");
+				console.log("Unmatched jobs:", unmatchedJobs.map(job => job.name));
+			}
+		});		
 	}
 	handleNetworkErr(err) {
 		console.error(err);
