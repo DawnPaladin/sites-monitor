@@ -43,14 +43,13 @@ class App extends Component {
 		const start = () => {
 			this.setState({ networkStatus: "loading" });
 			Promise.all([ this.getLoadBalancerStatus(), this.getJenkinsStatus() ]).then((response) => {
-				if (response instanceof Error) {
-					this.handleNetworkErr(response);
-				}
-				const loadBalancerData = response[0];
-				const jenkinsData = response[1];
+				const [ loadBalancerData, jenkinsData ] = response;
 				this.processLoadBalancerData(loadBalancerData, () => {
 					this.processJenkinsData(jenkinsData);
 				});
+			}, (error) => { 
+				this.handleNetworkErr(error);
+			}).then(() => {
 				this.setState({
 					fetchLoop: setInterval(tick, 1000),
 					timeSinceLastUpdate: 0,
@@ -148,7 +147,7 @@ class App extends Component {
 			
 		this.setState({ serviceStats: serviceStats, serverStats: serverStats }, callback);
 	}
-	getJenkinsStatus() { // FIXME: Doesn't notice CORS ererors
+	getJenkinsStatus() {
 		return fetch(jenkinsUrl)
 		.then(response => {
 			if (response.ok) {
@@ -208,7 +207,6 @@ class App extends Component {
 		});		
 	}
 	handleNetworkErr(err) {
-		console.error(err);
 		this.setState({
 			networkText: err.message,
 			groups: [],
