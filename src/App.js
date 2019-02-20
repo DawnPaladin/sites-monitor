@@ -260,8 +260,17 @@ class App extends Component {
 		var jenkinsLogEntries = this.state.timestamps.map(timestamp => {
 			let job = this.state.jobsByTimestamp[timestamp];
 			let build = job.builds[0];
-			// job.name
-			return <div key={timestamp} className="log-line">{job.name} {resultText[build.result]} {formatTimeAgo(timestamp)}</div>
+			
+			// TODO: Refactor into component to eliminate code duplication
+			let jenkinsClassName = "diamond";
+			if      (build.result === "SUCCESS") jenkinsClassName += " green";
+			else if (build.result === "FAILURE") jenkinsClassName += " red";
+			else jenkinsClassName += " grey";
+			
+			return (<div key={timestamp} className="log-line">
+				<div className={jenkinsClassName}></div>
+				{job.name} {resultText[build.result]} {formatTimeAgo(timestamp)}
+			</div>);
 		})
 		return (
 			<div id="App">
@@ -380,25 +389,37 @@ class System extends Component {
 				title={server.id}
 			></div>
 		));
+		
+		var jenkinsClassName = "";
 		var jenkinsBuilds = [];
-		if (this.props.system.jenkinsJobs) jenkinsBuilds = this.props.system.jenkinsJobs.map(job => {
-			var buildVizClasses = "build-viz";
-			if (job.builds[0].result === "SUCCESS") buildVizClasses += " green-text";
-			if (job.builds[0].result === "FAILURE") buildVizClasses += " red-text";
-			if (this.notTooLongAgo(job.builds[0].timestamp) || debugJenkins) {
-				return (<div className={buildVizClasses} key={job.name} title={"Jenkins job: " + job.name}>
-					{this.formatTimeAgo(job.builds[0].timestamp)}
-				</div>);
-			} else {
-				return <div key={job.name}></div>
-			}
-		});
+		// TODO: Refactor into component
+		if (this.props.system.jenkinsJobs && this.props.system.jenkinsJobs.length) {
+			
+			jenkinsClassName += "diamond";
+			if      (this.props.system.jenkinsJobs[0].builds[0].result === "SUCCESS") jenkinsClassName += " green";
+			else if (this.props.system.jenkinsJobs[0].builds[0].result === "FAILURE") jenkinsClassName += " red";
+			else jenkinsClassName += " grey";
+			
+			jenkinsBuilds = this.props.system.jenkinsJobs.map(job => {
+				var buildVizClasses = "build-viz";
+				if (job.builds[0].result === "SUCCESS") buildVizClasses += " green-text";
+				if (job.builds[0].result === "FAILURE") buildVizClasses += " red-text";
+				if (this.notTooLongAgo(job.builds[0].timestamp) || debugJenkins) {
+					return (<div className={buildVizClasses} key={job.name} title={"Jenkins job: " + job.name}>
+						{this.formatTimeAgo(job.builds[0].timestamp)}
+					</div>);
+				} else {
+					return null;
+				}
+			});
+		}
 		return (
 			<div className="system">
 				<div title={this.props.system.id} className={"circle " + serviceColor[this.props.system.status]}></div>
 				<div className="rects">
 					{servers}
 				</div>
+				<div className={jenkinsClassName}></div>
 				<div className="builds">
 					{jenkinsBuilds}
 				</div>
