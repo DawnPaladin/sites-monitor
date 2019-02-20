@@ -9,6 +9,8 @@
 
 html {
 	background: black;
+	scrollbar-width: thin;
+	scrollbar-color: black #404040;
 }
 
 #App {
@@ -243,6 +245,15 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	}
 	.downed-service-name {
 		font-weight: bold;
+	}
+}
+
+.jenkins-log {
+	background: black;
+	padding: 0.25em 1em;
+	overflow: hidden;
+	h2 {
+		margin: 0.25em 0;
 	}
 }
 

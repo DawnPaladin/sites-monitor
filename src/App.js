@@ -7,6 +7,7 @@ import './App.scss';
 const loadBalancerUrl = "http://proxy.hkijharris.test/getStatus.php";
 const jenkinsUrl = "http://proxy.hkijharris.test/jenkins.php";
 const updateFrequency = 30; // seconds to wait between data refreshes
+const numJenkinsBuildsToShow = 15;
 const simulateDownedService = false;
 const debugJenkins = false;
 
@@ -27,6 +28,8 @@ class App extends Component {
 			downedServices: [],
 			timeSinceLastUpdate: 0,
 			networkText: "Loading...",
+			jobsByTimestamp: {},
+			timestamps: [],
 		};
 		this.fetchLoopController = this.fetchLoopController.bind(this);
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
@@ -170,6 +173,7 @@ class App extends Component {
 			const unmatchedJobs = [];
 			const textInBrackets = /\[(.+?)\]/g;
 			let jobsMatched = 0;
+			state.timestamps = [];
 			while (jobs.length > 0) {
 				const job = jobs.pop();
 				let jobMatched = false;
@@ -199,11 +203,18 @@ class App extends Component {
 				if (!jobMatched) {
 					unmatchedJobs.push(job);
 				}
+				let timestamp = job.builds[0].timestamp;
+				state.timestamps.push(timestamp);
+				state.jobsByTimestamp[timestamp] = job;
 			}
 			if (debugJenkins) {
 				console.log("Matched", jobsMatched, "Jenkins jobs with Load Balancer services");
 				console.log("Unmatched jobs:", unmatchedJobs.map(job => job.name));
 			}
+			state.timestamps.sort();
+			state.timestamps.reverse();
+			state.timestamps = state.timestamps.slice(0, numJenkinsBuildsToShow);
+			
 		});		
 	}
 	handleNetworkErr(err) {
@@ -220,6 +231,38 @@ class App extends Component {
 		}
 		var downedServices = this.state.downedServices.map(service => <DownedService service={service} key={service.id} />);
 		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/updateFrequency;
+		
+		const resultText = { 
+			"SUCCESS": "succeeded",
+			"FAILURE": "failed",
+			"ABORTED": "aborted",
+		}
+		function formatTimeAgo(timestamp) {
+			if (isNaN(timestamp)) return '';
+			
+			var seconds = Math.floor((new Date() - timestamp) / 1000);
+			
+			// days
+			var interval = Math.floor(seconds / 86400 );
+			if (interval === 1) return `1 day ago`
+			if (interval > 1) return `${interval} days ago`
+			// hours
+			interval = Math.floor(seconds / 3600);
+			if (interval === 1) return `1 hour ago`;
+			if (interval > 1) return `${interval} hours ago`;
+			// minutes
+			interval = Math.floor(seconds / 60);
+			if (interval === 1) return `1 minute ago`;
+			if (interval > 1) return `${interval} minutes ago`;
+			// seconds
+			return `${seconds} seconds ago`;
+		}
+		var jenkinsLogEntries = this.state.timestamps.map(timestamp => {
+			let job = this.state.jobsByTimestamp[timestamp];
+			let build = job.builds[0];
+			// job.name
+			return <div key={timestamp} className="log-line">{job.name} {resultText[build.result]} {formatTimeAgo(timestamp)}</div>
+		})
 		return (
 			<div id="App">
 				<div className="monitor">
@@ -267,6 +310,10 @@ class App extends Component {
 						<div className="downed-services">
 							{downedServices}
 						</div>
+						<div className="jenkins-log">
+							<h2>Jenkins build log</h2>
+							{ jenkinsLogEntries }
+						</div>
 					</div>
 				</div>
 			</div>
@@ -311,10 +358,10 @@ class System extends Component {
 		
 		// hours
 		var interval = Math.floor(seconds / 3600);
-		if (interval > 1) return `${interval}h`;
+		if (interval > 0) return `${interval}h`;
 		// minutes
 		interval = Math.floor(seconds / 60);
-		if (interval > 1) return `${interval}m`;
+		if (interval > 0) return `${interval}m`;
 		// seconds
 		return `${seconds}s`;
 	}
