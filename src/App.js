@@ -4,6 +4,7 @@ import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './App.scss';
 import System from './System';
+import JenkinsLog from './JenkinsLog';
 
 const loadBalancerUrl = "http://proxy.hkijharris.test/getStatus.php";
 const jenkinsUrl = "http://proxy.hkijharris.test/jenkins.php";
@@ -238,46 +239,6 @@ class App extends Component {
 		var downedServices = this.state.downedServices.map(service => <DownedService service={service} key={service.id} />);
 		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/updateFrequency;
 		
-		const resultText = { 
-			"SUCCESS": "succeeded",
-			"FAILURE": "failed",
-			"ABORTED": "aborted",
-		}
-		function formatTimeAgo(timestamp) {
-			if (isNaN(timestamp)) return '';
-			
-			var seconds = Math.floor((new Date() - timestamp) / 1000);
-			
-			// days
-			var interval = Math.floor(seconds / 86400 );
-			if (interval === 1) return `1 day ago`
-			if (interval > 1) return `${interval} days ago`
-			// hours
-			interval = Math.floor(seconds / 3600);
-			if (interval === 1) return `1 hour ago`;
-			if (interval > 1) return `${interval} hours ago`;
-			// minutes
-			interval = Math.floor(seconds / 60);
-			if (interval === 1) return `1 minute ago`;
-			if (interval > 1) return `${interval} minutes ago`;
-			// seconds
-			return `${seconds} seconds ago`;
-		}
-		var jenkinsLogEntries = this.state.timestamps.map(timestamp => {
-			let job = this.state.jobsByTimestamp[timestamp];
-			let build = job.builds[0];
-			
-			// TODO: Refactor into component to eliminate code duplication
-			let jenkinsClassName = "diamond";
-			if      (build.result === "SUCCESS") jenkinsClassName += " green";
-			else if (build.result === "FAILURE") jenkinsClassName += " red";
-			else jenkinsClassName += " grey";
-			
-			return (<div key={timestamp} className="log-line">
-				<div className={jenkinsClassName}></div>
-				{job.name} {resultText[build.result]} {formatTimeAgo(timestamp)}
-			</div>);
-		})
 		return (
 			<div id="App">
 				<div className="monitor">
@@ -325,10 +286,7 @@ class App extends Component {
 						<div className="downed-services">
 							{downedServices}
 						</div>
-						<div className="jenkins-log">
-							<h2>Jenkins build log</h2>
-							{ jenkinsLogEntries }
-						</div>
+						<JenkinsLog timestamps={this.state.timestamps} jobsByTimestamp={this.state.jobsByTimestamp} />
 					</div>
 				</div>
 			</div>

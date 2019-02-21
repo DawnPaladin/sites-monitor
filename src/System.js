@@ -4,7 +4,9 @@ const serviceColor = {
 	up: "green",
 	down: "red",
 }
-
+/**
+ * Visualizes a service (site) which is kept live by one or more servers. Member of a Group.
+ */
 export default class System extends Component {
 	constructor(props) {
 		super(props);
