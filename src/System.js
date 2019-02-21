@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
+import Diamond from './Diamond';
+
 const serviceColor = {
 	up: "green",
 	down: "red",
 }
-/**
- * Visualizes a service (site) which is kept live by one or more servers. Member of a Group.
- */
+/** Visualizes a service (site) which is kept live by one or more servers. Member of a Group. */
 export default class System extends Component {
 	constructor(props) {
 		super(props);
@@ -47,15 +47,10 @@ export default class System extends Component {
 			></div>
 		));
 		
-		var jenkinsClassName = "";
 		var jenkinsBuilds = [];
-		// TODO: Refactor into component
+		var diamond = null;
 		if (this.props.system.jenkinsJobs && this.props.system.jenkinsJobs.length) {
-			
-			jenkinsClassName += "diamond";
-			if      (this.props.system.jenkinsJobs[0].builds[0].result === "SUCCESS") jenkinsClassName += " green";
-			else if (this.props.system.jenkinsJobs[0].builds[0].result === "FAILURE") jenkinsClassName += " red";
-			else jenkinsClassName += " grey";
+			diamond = <Diamond buildResult={this.props.system.jenkinsJobs[0].builds[0].result} />
 			
 			jenkinsBuilds = this.props.system.jenkinsJobs.map(job => {
 				var buildVizClasses = "build-viz";
@@ -76,7 +71,7 @@ export default class System extends Component {
 				<div className="rects">
 					{servers}
 				</div>
-				<div className={jenkinsClassName}></div>
+				{diamond}
 				<div className="builds">
 					{jenkinsBuilds}
 				</div>

@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Diamond from './Diamond';
+
 const resultText = { 
 	"SUCCESS": "succeeded",
 	"FAILURE": "failed",
@@ -43,14 +45,8 @@ export default class JenkinsLog extends React.Component {
 			let job = this.props.jobsByTimestamp[timestamp];
 			let build = job.builds[0];
 			
-			// TODO: Refactor into component to eliminate code duplication
-			let jenkinsClassName = "diamond";
-			if      (build.result === "SUCCESS") jenkinsClassName += " green";
-			else if (build.result === "FAILURE") jenkinsClassName += " red";
-			else jenkinsClassName += " grey";
-			
 			return (<div key={timestamp} className="log-line">
-				<div className={jenkinsClassName}></div>
+				<Diamond buildResult={build.result} />
 				{job.name} {resultText[build.result]} {this.formatTimeAgo(timestamp)}
 			</div>);
 		})
