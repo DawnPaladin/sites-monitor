@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './App.scss';
+import System from './System';
 
 const loadBalancerUrl = "http://proxy.hkijharris.test/getStatus.php";
 const jenkinsUrl = "http://proxy.hkijharris.test/jenkins.php";
@@ -10,6 +11,11 @@ const updateFrequency = 30; // seconds to wait between data refreshes
 const numJenkinsBuildsToShow = 15;
 const simulateDownedService = false;
 const debugJenkins = false;
+const serverColors = {
+	enable: "green",
+	disable: "grey",
+	"out-of-service-health": "red"
+}
 
 class App extends Component {
 	constructor(props) {
@@ -331,7 +337,7 @@ class App extends Component {
 }
 
 const Group = props => {
-	var systems = props.group.virtual_services.map(system => <System key={system.name} system={system} />);
+	var systems = props.group.virtual_services.map(system => <System key={system.name} system={system} debugJenkins={debugJenkins} serverColors={serverColors} />);
 	return (
 		<li className="group">
 			{props.group.id}
@@ -340,98 +346,10 @@ const Group = props => {
 	)
 };
 
-const serviceColor = {
-	up: "green",
-	down: "red",
-}
-const serverColor = {
-	enable: "green",
-	disable: "grey",
-	"out-of-service-health": "red"
-}
-
-class System extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			servers: this.props.system.servers,
-			system: this.props.system,
-		}
-		this.formatTimeAgo = this.formatTimeAgo.bind(this);
-		this.notTooLongAgo = this.notTooLongAgo.bind(this);
-	}
-	formatTimeAgo(timestamp) {
-		if (isNaN(timestamp)) return '';
-		
-		var seconds = Math.floor((new Date() - timestamp) / 1000);
-		
-		// hours
-		var interval = Math.floor(seconds / 3600);
-		if (interval > 0) return `${interval}h`;
-		// minutes
-		interval = Math.floor(seconds / 60);
-		if (interval > 0) return `${interval}m`;
-		// seconds
-		return `${seconds}s`;
-	}
-	notTooLongAgo(timestamp) {
-		var now = new Date();
-		var currentTimestamp = now.valueOf();
-		const eightHours = 1000 * 60 * 60 * 8;
-		return (currentTimestamp - timestamp) < eightHours;
-	}
-	render() {
-		var servers = this.state.servers.map(server => (
-			<div 
-				className={ "rect " + serverColor[server.operational_status]}
-				server={server}
-				key={server.id}
-				title={server.id}
-			></div>
-		));
-		
-		var jenkinsClassName = "";
-		var jenkinsBuilds = [];
-		// TODO: Refactor into component
-		if (this.props.system.jenkinsJobs && this.props.system.jenkinsJobs.length) {
-			
-			jenkinsClassName += "diamond";
-			if      (this.props.system.jenkinsJobs[0].builds[0].result === "SUCCESS") jenkinsClassName += " green";
-			else if (this.props.system.jenkinsJobs[0].builds[0].result === "FAILURE") jenkinsClassName += " red";
-			else jenkinsClassName += " grey";
-			
-			jenkinsBuilds = this.props.system.jenkinsJobs.map(job => {
-				var buildVizClasses = "build-viz";
-				if (job.builds[0].result === "SUCCESS") buildVizClasses += " green-text";
-				if (job.builds[0].result === "FAILURE") buildVizClasses += " red-text";
-				if (this.notTooLongAgo(job.builds[0].timestamp) || debugJenkins) {
-					return (<div className={buildVizClasses} key={job.name} title={"Jenkins job: " + job.name}>
-						{this.formatTimeAgo(job.builds[0].timestamp)}
-					</div>);
-				} else {
-					return null;
-				}
-			});
-		}
-		return (
-			<div className="system">
-				<div title={this.props.system.id} className={"circle " + serviceColor[this.props.system.status]}></div>
-				<div className="rects">
-					{servers}
-				</div>
-				<div className={jenkinsClassName}></div>
-				<div className="builds">
-					{jenkinsBuilds}
-				</div>
-			</div>
-		)
-	}
-}
-
 class DownedService extends Component {
 	render() {
 		var servers = this.props.service.servers.map(server => <div className="server indent" key={server.id}>
-				<div className={"square " + serverColor[server.operational_status]}></div>
+				<div className={"square " + serverColors[server.operational_status]}></div>
 				<div className="server-name">{server.id}</div>
 		</div>)
 		return <div className="downed-service">
