@@ -6,7 +6,7 @@ import './App.scss';
 import System from './System';
 import JenkinsLog from './JenkinsLog';
 
-const loadBalancerUrl = "http://proxy.hkijharris.test/getStatus.php";
+const loadBalancerUrl = "http://proxy.hkijharris.test/load-balancer.php";
 const jenkinsUrl = "http://proxy.hkijharris.test/jenkins.php";
 const updateFrequency = 30; // seconds to wait between data refreshes
 const numJenkinsBuildsToShow = 15;
