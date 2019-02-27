@@ -3,12 +3,8 @@ import PropTypes from 'prop-types';
 
 /** Used in the System component and the Jenkins build log */
 export default class Diamond extends React.Component {
-	constructor(props) {
-		super(props);
-		
-		this.propTypes = {
-			buildResult: PropTypes.string.isRequired,
-		}
+	static propTypes = {
+		buildResult: PropTypes.string.isRequired,
 	}
 	render() {
 		let jenkinsClassName = "diamond";

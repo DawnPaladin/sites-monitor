@@ -10,13 +10,13 @@ const resultText = {
 }
 
 export default class JenkinsLog extends React.Component {
+	static propTypes = {
+		timestamps: PropTypes.array.isRequired,
+		jobsByTimestamp: PropTypes.object.isRequired,
+	}
 	constructor(props) {
 		super(props);
 		this.state = {};
-		this.propTypes = {
-			timestamps: PropTypes.array.isRequired,
-			jobsByTimestamp: PropTypes.object.isRequired,
-		}
 		
 		this.formatTimeAgo = this.formatTimeAgo.bind(this);
 	}
