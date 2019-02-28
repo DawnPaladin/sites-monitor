@@ -11,6 +11,7 @@ $login_curl = curl_init();
 
 $url = "https://10.1.11.250/restapi/v2/login";
 $credentials = $secrets['load-balancer'];
+if($secrets['load-balancer']['enabled']==false) return '{}';
 
 curl_setopt($login_curl, CURLOPT_POST, 1);
 curl_setopt($login_curl, CURLOPT_POSTFIELDS, $credentials);
