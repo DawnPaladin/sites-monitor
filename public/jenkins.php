@@ -1,5 +1,7 @@
 <?php
 
+@require('secrets.php');
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: text/json");
 
