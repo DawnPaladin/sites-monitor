@@ -2,6 +2,7 @@
   "name": "sites-monitor",
   "version": "1.0.0",
   "private": true,
+  "homepage": "https://sitesmonitor.hkipm.com",
   "dependencies": {
     "node-sass": "^4.11.0",
     "react": "^16.7.0",
