@@ -18,27 +18,19 @@ function fetch($url)
 
 $jobs = array();
 
-
-if ($secrets['old-jenkins']['enabled'])
+foreach($secrets['jenkins'] as $jenkinsName=>$jenkinsInfo)
 {
-    $credentials = $secrets['old-jenkins']['username'] . ':' . $secrets['old-jenkins']['password'];
-
-    $oldJenkinsData = fetch("http://$credentials@jenkins.hkipm.com:8080/api/json?tree=jobs[name,description,color,builds[number,result,timestamp]{0,1}]");
-    if (is_array($oldJenkinsData['jobs']))
+    if ($jenkinsInfo['enabled'])
     {
-        $jobs = array_merge($jobs, $oldJenkinsData['jobs']);
-    }
-}
+        $credentials = $jenkinsInfo['username'] . ':' . $jenkinsInfo['password'];
 
-
-if ($secrets['new-jenkins']['enabled'])
-{
-    $credentials = $secrets['new-jenkins']['username'] . ':' . $secrets['new-jenkins']['password'];
-
-    $newJenkinsData = fetch("http://$credentials@jenkins.hkipop.com/api/json?tree=jobs[name,description,color,builds[number,result,timestamp]{0,1}]");
-    if (is_array($oldJenkinsData['jobs']))
-    {
-        $jobs = array_merge($jobs, $oldJenkinsData['jobs']);
+        $jenkinsData = fetch("http://$credentials@".
+            $jenkinsInfo['api'].
+            "/json?tree=jobs[name,description,color,builds[number,result,timestamp]{0,1}]");
+        if (is_array($jenkinsData['jobs']))
+        {
+            $jobs = array_merge($jobs, $jenkinsData['jobs']);
+        }
     }
 }
 
