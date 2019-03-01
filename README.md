@@ -4,4 +4,21 @@ This is a site-status dashboard that my team projects on one wall of our office.
 
 ![Demo](demo.png)
 
-Each circle is a site/service; each rectangle is one of the servers holding it up. If something turns red, it's down and you should go fix it. Data is fetched from the `dataUrl` on line 7 every 30 seconds.
+Run `npm start` to start the development server. `npm run build` will build it for production.
+
+## Architecture
+
+### sites-monitor/src
+
+- **App.jsx:** All the networking and data-processing logic, and the app's overall layout.
+- **App.scss:** Stylesheet
+- **System.jsx:** React component visualizing a System, which is a service (site) and the servers that keep it live. Systems may also show a diamond that represents the most recent Jenkins build (defined in Diamond.jsx). Systems are organized into Groups defined by the load balancer.
+- **JenkinsLog.jsx:** Displays recent builds from Jenkins. The number of recent builds is determined by `const numJenkinsBuildsToShow` in App.jsx.
+
+### D:\apache\htdocs\proxy\
+
+The React project isn't able to fetch data directly from Jenkins or the load balancer due to cross-site scripting limitations, so we use this PHP proxy instead. These files are not included in this repository because they contain important passwords.
+
+- **load-balancer.php:** Gets a token by logging into our Barracuda load balancer, then uses that token to fetch a grouped list of servers and services.
+- **jenkins.php:** Fetches the most recent build for each project from the old and the new Jenkins servers, then merges those two lists together.
+- **jenkins-old.php: Deprecated.** Written before we understood how to fetch well-arranged data from Jenkins, this fetches ALL the information and then arranges it.

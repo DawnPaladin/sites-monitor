@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import Diamond from './Diamond';
 
@@ -8,6 +9,27 @@ const serviceColor = {
 }
 /** Visualizes a service (site) which is kept live by one or more servers. Member of a Group. */
 export default class System extends Component {
+	static propTypes = {
+		system: PropTypes.shape({
+			servers: PropTypes.arrayOf(PropTypes.shape({
+				id: PropTypes.string.isRequired,
+				operational_status: PropTypes.string.isRequired,
+			})).isRequired,
+			id: PropTypes.string.isRequired,
+			status: PropTypes.string, // should be present, but not on first render
+			jenkinsJobs: PropTypes.arrayOf(PropTypes.shape({
+				builds: PropTypes.arrayOf(PropTypes.shape({
+					result: PropTypes.string.isRequired,
+					timestamp: PropTypes.number.isRequired
+				})).isRequired,
+			})), // jenkinsJobs are not required
+		}).isRequired,
+		debugJenkins: PropTypes.bool, // not required
+		serverColors: PropTypes.shape({
+			enable: PropTypes.string.isRequired,
+			disable: PropTypes.string.isRequired,
+		}).isRequired,
+	}
 	constructor(props) {
 		super(props);
 		this.state = {
