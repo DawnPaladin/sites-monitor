@@ -16,8 +16,6 @@ export default class JenkinsLog extends React.Component {
 	}
 	constructor(props) {
 		super(props);
-		this.state = {};
-		
 		this.formatTimeAgo = this.formatTimeAgo.bind(this);
 	}
 	formatTimeAgo(timestamp) {

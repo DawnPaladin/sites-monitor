@@ -34,7 +34,6 @@ export default class System extends Component {
 		super(props);
 		this.state = {
 			servers: this.props.system.servers,
-			system: this.props.system,
 		}
 		this.formatTimeAgo = this.formatTimeAgo.bind(this);
 		this.notTooLongAgo = this.notTooLongAgo.bind(this);
@@ -60,7 +59,7 @@ export default class System extends Component {
 		return (currentTimestamp - timestamp) < eightHours;
 	}
 	render() {
-		var servers = this.state.servers.map(server => (
+		var servers = this.props.system.servers.map(server => (
 			<div 
 				className={ "rect " + this.props.serverColors[server.operational_status]}
 				server={server}
