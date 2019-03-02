@@ -6,11 +6,11 @@ import './App.scss';
 import System from './System';
 import JenkinsLog from './JenkinsLog';
 
-const loadBalancerUrl = "/load-balancer.php";
-const jenkinsUrl = "/jenkins.php";
+const loadBalancerUrl = "/sites-monitor/load-balancer.json";
+const jenkinsUrl = "/sites-monitor/jenkins.json";
 const updateFrequency = 30; // seconds to wait between data refreshes
 const numJenkinsBuildsToShow = 15;
-const simulateDownedService = false;
+const simulateDownedService = true;
 const debugJenkins = false;
 const serverColors = {
 	enable: "green",

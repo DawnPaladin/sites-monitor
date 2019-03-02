@@ -21,7 +21,7 @@ export default class JenkinsLog extends React.Component {
 	formatTimeAgo(timestamp) {
 		if (isNaN(timestamp)) return '';
 		
-		var seconds = Math.floor((new Date() - timestamp) / 1000);
+		var seconds = Math.floor((new Date('Feb 27, 2019 12:19:00') - timestamp) / 1000);
 		
 		// days
 		var interval = Math.floor(seconds / 86400 );
