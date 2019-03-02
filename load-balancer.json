@@ -1,0 +1,889 @@
+{
+   "data": [
+      {
+         "id": "default",
+         "virtual_services": [
+            {
+               "id": "FTPS",
+               "name": "ftps.hki.com",
+               "servers": [
+                  {
+                     "id": 40,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Test",
+               "name": "Test",
+               "servers": [
+                  {
+                     "id": 4,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "IPM",
+         "virtual_services": [
+            {
+               "id": "Global",
+               "name": "Global",
+               "servers": [
+                  {
+                     "id": 41,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 95,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 28,
+                     "operational_status": "enable"
+                  },
+                  {
+                     "id": 0,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Latin_America",
+               "name": "Latin_America",
+               "servers": [
+                  {
+                     "id": 84,
+                     "operational_status": "enable"
+                  },
+                  {
+                     "id": 67,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "North_America",
+               "name": "North_America",
+               "servers": [
+                  {
+                     "id": 23,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 56,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Canada",
+               "name": "Canada",
+               "servers": [
+                  {
+                     "id": 33,
+                     "operational_status": "enable"
+                  },
+                  {
+                     "id": 42,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Corporate",
+               "name": "Corporate",
+               "servers": [
+                  {
+                     "id": 87,
+                     "operational_status": "enable"
+                  },
+                  {
+                     "id": 13,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Whiteboard_Editor",
+               "name": "Whiteboard_Editor",
+               "servers": [
+                  {
+                     "id": 76,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "Support",
+         "virtual_services": [
+            {
+               "id": "Jenkins_NA",
+               "name": "Jenkins_NA",
+               "servers": [
+                  {
+                     "id": 78,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "jenkins_OLD",
+               "name": "jenkins_OLD",
+               "servers": [
+                  {
+                     "id": 14,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "Express_Order_System",
+         "virtual_services": [
+            {
+               "id": "Express_Orders",
+               "name": "Express_Orders",
+               "servers": [
+                  {
+                     "id": 72,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 31,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Express_Orders_SSL",
+               "name": "Express_Orders_SSL",
+               "servers": [
+                  {
+                     "id": 62,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 46,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Product_Showcase",
+               "name": "Product_Showcase",
+               "servers": [
+                  {
+                     "id": 8,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Orders_HKI_Express",
+               "name": "Orders_HKI_Express",
+               "servers": [
+                  {
+                     "id": 60,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Product_Showcase_Express",
+               "name": "Product_Showcase_Express",
+               "servers": [
+                  {
+                     "id": 10,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Product_Showcase_UAT",
+               "name": "Product_Showcase_UAT",
+               "servers": [
+                  {
+                     "id": 26,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Product_Showcase_QA",
+               "name": "Product_Showcase_QA",
+               "servers": [
+                  {
+                     "id": 25,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Product_Showcase_Dev",
+               "name": "Product_Showcase_Dev",
+               "servers": [
+                  {
+                     "id": 88,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "Surveys",
+         "virtual_services": [
+            {
+               "id": "Dallas_Limesurvey",
+               "name": "Dallas_Limesurvey",
+               "servers": [
+                  {
+                     "id": 20,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Customer_Feedback_Legacy",
+               "name": "Customer_Feedback_Legacy",
+               "servers": [
+                  {
+                     "id": 16,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "Misc",
+         "virtual_services": [
+            {
+               "id": "Mobile_Forms_SSL",
+               "name": "Mobile_Forms_SSL",
+               "servers": [
+                  {
+                     "id": 15,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "PM_Calendar",
+               "name": "PM_Calendar",
+               "servers": [
+                  {
+                     "id": 5,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "Kimai_Trackers",
+         "virtual_services": [
+            {
+               "id": "Dallas_CAD_Time_Tracker",
+               "name": "Dallas_CAD_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 10,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 22,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "SLP_Sales_Time_Tracker",
+               "name": "SLP_Sales_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 94,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 48,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "SLP_Engineering_Time_Tracker",
+               "name": "SLP_Engineering_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 30,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 41,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Dallas_Engineering_Time_Tracker",
+               "name": "Dallas_Engineering_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 69,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 61,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "UAT_Dallas_CAD_Time_Tracker",
+               "name": "UAT_Dallas_CAD_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 21,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "UAT_Dallas_Eng_Time_Tracker",
+               "name": "UAT_Dallas_Eng_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 77,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "UAT_SLP_Sales_Time_Tracker",
+               "name": "UAT_SLP_Sales_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 3,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "UAT_SLP_Eng_Time_Tracker",
+               "name": "UAT_SLP_Eng_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 41,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "QA_Kimai_Time_Tracker",
+               "name": "QA_Kimai_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 1,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "DEV_Kimai_Time_Tracker",
+               "name": "DEV_Kimai_Time_Tracker",
+               "servers": [
+                  {
+                     "id": 30,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "AR_Portal",
+         "virtual_services": [
+            {
+               "id": "AR_Portal_Production",
+               "name": "AR_Portal_Production",
+               "servers": [
+                  {
+                     "id": 26,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "AR_Portal_UAT",
+               "name": "AR_Portal_UAT",
+               "servers": [
+                  {
+                     "id": 0,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "AR_Portal_QA",
+               "name": "AR_Portal_QA",
+               "servers": [
+                  {
+                     "id": 33,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "AR_Portal_Dev",
+               "name": "AR_Portal_Dev",
+               "servers": [
+                  {
+                     "id": 20,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "CAD_Sites",
+         "virtual_services": [
+            {
+               "id": "CAD_Sites_Production",
+               "name": "CAD_Sites_Production",
+               "servers": [
+                  {
+                     "id": 52,
+                     "operational_status": "enable"
+                  },
+                  {
+                     "id": 81,
+                     "operational_status": "disable"
+                  }
+               ]
+            },
+            {
+               "id": "CAD_Sites_UAT",
+               "name": "CAD_Sites_UAT",
+               "servers": [
+                  {
+                     "id": 48,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "CAD_Sites_QA",
+               "name": "CAD_Sites_QA",
+               "servers": [
+                  {
+                     "id": 16,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "CAD_Sites_DEV",
+               "name": "CAD_Sites_DEV",
+               "servers": [
+                  {
+                     "id": 87,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "PO_Approval",
+         "virtual_services": [
+            {
+               "id": "PO_Approval_Production",
+               "name": "PO_Approval_Production",
+               "servers": [
+                  {
+                     "id": 69,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 60,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "PO_Approval_UAT",
+               "name": "PO_Approval_UAT",
+               "servers": [
+                  {
+                     "id": 81,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "PO_Approval_QA",
+               "name": "PO_Approval_QA",
+               "servers": [
+                  {
+                     "id": 65,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "PO_Approval_DEV",
+               "name": "PO_Approval_DEV",
+               "servers": [
+                  {
+                     "id": 22,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "Warranty",
+         "virtual_services": [
+            {
+               "id": "Warranty_Production",
+               "name": "Warranty_Production",
+               "servers": [
+                  {
+                     "id": 64,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 10,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Warranty_UAT",
+               "name": "Warranty_UAT",
+               "servers": [
+                  {
+                     "id": 28,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Warranty_QA",
+               "name": "Warranty_QA",
+               "servers": [
+                  {
+                     "id": 4,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Warranty_Development",
+               "name": "Warranty_Development",
+               "servers": [
+                  {
+                     "id": 60,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "HKI_Time_Trackers",
+         "virtual_services": [
+            {
+               "id": "Time_Tracker_Production",
+               "name": "Time_Tracker_Production",
+               "servers": [
+                  {
+                     "id": 41,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 1,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Time_Tracker_UAT",
+               "name": "Time_Tracker_UAT",
+               "servers": [
+                  {
+                     "id": 54,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 65,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Time_Tracker_QA",
+               "name": "Time_Tracker_QA",
+               "servers": [
+                  {
+                     "id": 67,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 38,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Time_Tracker_Development",
+               "name": "Time_Tracker_Development",
+               "servers": [
+                  {
+                     "id": 81,
+                     "operational_status": "disable"
+                  },
+                  {
+                     "id": 2,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "Credit_Notes_Approval",
+         "virtual_services": [
+            {
+               "id": "Credit_Notes_PROD",
+               "name": "Credit_Notes_PROD",
+               "servers": [
+                  {
+                     "id": 29,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Credit_Notes_UAT",
+               "name": "Credit_Notes_UAT",
+               "servers": [
+                  {
+                     "id": 50,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Credit_Notes_QA",
+               "name": "Credit_Notes_QA",
+               "servers": [
+                  {
+                     "id": 78,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Credit_Notes_DEV",
+               "name": "Credit_Notes_DEV",
+               "servers": [
+                  {
+                     "id": 83,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "HKI_HelpDesk",
+         "virtual_services": [
+            {
+               "id": "IT",
+               "name": "IT",
+               "servers": [
+                  {
+                     "id": 6,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Engineering",
+               "name": "Engineering",
+               "servers": [
+                  {
+                     "id": 47,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Facilities",
+               "name": "Facilities",
+               "servers": [
+                  {
+                     "id": 46,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "HealthSafety",
+               "name": "HealthSafety",
+               "servers": [
+                  {
+                     "id": 74,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Purchasing",
+               "name": "Purchasing",
+               "servers": [
+                  {
+                     "id": 31,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "SLP_Purchasing",
+               "name": "SLP_Purchasing",
+               "servers": [
+                  {
+                     "id": 39,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Shipping",
+               "name": "Shipping",
+               "servers": [
+                  {
+                     "id": 17,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "HKDallasRedirect",
+               "name": "HKDallasRedirect",
+               "servers": [
+                  {
+                     "id": 60,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "HKI_Engineering",
+               "name": "HKI_Engineering",
+               "servers": [
+                  {
+                     "id": 99,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "HKI_SLP_Engineering",
+               "name": "HKI_SLP_Engineering",
+               "servers": [
+                  {
+                     "id": 78,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "ELSIE_Sites",
+         "virtual_services": [
+            {
+               "id": "Engineering_Docs",
+               "name": "Engineering_Docs",
+               "servers": [
+                  {
+                     "id": 73,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "Orion",
+               "name": "Orion",
+               "servers": [
+                  {
+                     "id": 83,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "APMEA",
+               "name": "APMEA",
+               "servers": [
+                  {
+                     "id": 13,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "FAB",
+               "name": "FAB",
+               "servers": [
+                  {
+                     "id": 90,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "PDF",
+         "virtual_services": [
+            {
+               "id": "NA_PDF_Viewer",
+               "name": "NA_PDF_Viewer",
+               "servers": [
+                  {
+                     "id": 33,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "id": "DEV",
+         "virtual_services": [
+            {
+               "id": "Sites_Monitor",
+               "name": "Sites_Monitor",
+               "servers": [
+                  {
+                     "id": 72,
+                     "operational_status": "enable"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
