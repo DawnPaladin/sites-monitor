@@ -8,9 +8,17 @@ html {
 	scrollbar-color: black #404040;
 }
 
+body {
+	margin: 0;
+}
+
 #App {
 	display: flex;
 	flex-direction: horizontal;
+}
+
+h2 {
+	margin: 0.25em 0;
 }
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i');
@@ -240,7 +248,19 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 // RIGHT SIDE
 /////////////////////////////////////////////////////
 
+@mixin scan-lines($opacity) {
+	position: relative;
+	&:before {
+		content: '';
+		position: absolute;
+		top: 0; right: 0; bottom: 0; left: 0;
+		opacity: $opacity;
+		background: url('/domino.png');
+		z-index: 0;
+	}
+}
 .stats {
+	@include scan-lines(.15);
 	color: white;
 	font-family: 'Roboto', sans-serif;
 	line-height: 1.75em;
@@ -266,17 +286,6 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 		position: relative;
 		margin: 0 0.25em;
 		bottom: -.125em;
-	}
-}
-@mixin scan-lines($opacity) {
-	position: relative;
-	&:before {
-		content: '';
-		position: absolute;
-		top: 0; right: 0; bottom: 0; left: 0;
-		opacity: $opacity;
-		background: url('/sites-monitor/domino.png');
-		z-index: 0;
 	}
 }
 .stat-line-green {
@@ -326,14 +335,14 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	}
 }
 
-.jenkins-log {
-	background: black;
+.legend, .jenkins-log {
 	padding: 0.25em 1em;
-	overflow: hidden;
-	h2 {
-		margin: 0.25em 0;
-	}
 }
+
+.legend img {
+	height: 5em;
+}
+
 .log-line {
 	position: relative;
 	padding-left: 1em;
