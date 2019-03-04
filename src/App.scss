@@ -1,11 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i');
-
-@mixin desktop {
-	@media (max-width: 1799px) { @content; }
-}
-@mixin jumbo {
-	@media (min-width: 1800px) { @content; }
-}
+/////////////////////////////////////////////////////
+// GLOBAL
+/////////////////////////////////////////////////////
 
 html {
 	background: black;
@@ -17,6 +12,68 @@ html {
 	display: flex;
 	flex-direction: horizontal;
 }
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i');
+
+/////////////////////////////////////////////////////
+// INGREDIENTS
+/////////////////////////////////////////////////////
+
+@mixin desktop {
+	@media (max-width: 1799px) { @content; }
+}
+@mixin jumbo {
+	@media (min-width: 1800px) { @content; }
+}
+
+.green {
+	background: rgb(0, 255, 0);
+}
+.red {
+	background: rgb(255, 20, 20);
+}
+.grey {
+	background: rgb(111,111,111);
+}
+.green-text {
+	color: rgb(0, 255, 0);
+}
+.red-text {
+	color: rgb(255, 20, 20);
+}
+.grey-text {
+	color: rgb(111,111,111);
+}
+
+.circle {
+	display: inline-block;
+	position: absolute;
+	bottom: 0;
+	box-sizing: border-box;
+	width: 1em;
+	height: 1em;	
+	border: .1em solid rgba(0, 0, 0, .75);
+	border-radius: 50%;
+}
+.square {
+	display: inline-block;
+	width: .8em;
+	height: .8em;	
+	border: .1em solid rgba(0, 0, 0, .75);
+}
+.diamond {
+	width: 0.15em;
+	height: 0.15em;
+	border: 0.09em solid rgba(0, 0, 0, .75);
+	transform: rotate(45deg);
+	top: 0.65em;
+	left: 0.35em;
+	position: absolute;
+}
+
+/////////////////////////////////////////////////////
+// LEFT SIDE
+/////////////////////////////////////////////////////
 
 .monitor {
 	flex-grow: 1;
@@ -53,42 +110,7 @@ html {
 	}
 }
 
-.green {
-	background: rgb(0, 255, 0);
-}
-.red {
-	background: rgb(255, 20, 20);
-}
-.grey {
-	background: rgb(111,111,111);
-}
-.green-text {
-	color: rgb(0, 255, 0);
-}
-.red-text {
-	color: rgb(255, 20, 20);
-}
-.grey-text {
-	color: rgb(111,111,111);
-}
-
-.square {
-	display: inline-block;
-	width: .8em;
-	height: .8em;	
-	border: .1em solid rgba(0, 0, 0, .75);
-}
-.circle {
-	display: inline-block;
-	position: absolute;
-	bottom: 0;
-	box-sizing: border-box;
-	width: 1em;
-	height: 1em;	
-	border: .1em solid rgba(0, 0, 0, .75);
-	border-radius: 50%;
-}
-.system .red.circle::before {
+.system .red.circle::before { // flashing lens flare behind downed sites
 	content: '';
 	position: absolute;
 	width: 1.5em;
@@ -111,15 +133,6 @@ html {
 		opacity: 1;
 	}
 }
-.diamond {
-	width: 0.15em;
-	height: 0.15em;
-	border: 0.09em solid rgba(0, 0, 0, .75);
-	transform: rotate(45deg);
-	top: 0.65em;
-	left: 0.35em;
-	position: absolute;
-}
 
 .system {
 	display: inline-block;
@@ -139,22 +152,6 @@ html {
 	right: 0;
 	width: 1em;
 }
-
-.builds {
-	margin-left: 1.1em;
-	line-height: 1.55em;
-}
-.build-viz {
-	display: inline-block;
-	position: relative;
-}
-.build-viz:not(:last-child) {
-	&::after {
-		content: ', ';
-		margin-right: .2em;
-	}
-}
-
 $thick-border: .1em solid rgba(0, 0, 0, .75);
 $thin-border:  .055em solid rgba(0, 0, 0, .75);
 .rect {
@@ -171,6 +168,77 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 		border-right: $thick-border;	
 	}
 }
+
+.builds { // time since last build, displayed to the right of a System
+	margin-left: 1.1em;
+	line-height: 1.55em;
+}
+.build-viz {
+	display: inline-block;
+	position: relative;
+}
+.build-viz:not(:last-child) {
+	&::after {
+		content: ', ';
+		margin-right: .2em;
+	}
+}
+
+#network-status {
+	position: absolute;
+	top: .25em;
+	right: .25em;
+	@include desktop {
+		font-size: 75px;
+	}
+	@include jumbo {
+		font-size: 75px;
+	}
+	width: 1em;
+	height: 1em;
+	box-sizing: border-box;
+	&.waiting {
+		cursor: pointer;
+	}
+	&.waiting:hover::before {
+		content: '';
+		display: block;
+		position: relative;
+		width: .3em;
+		height: .3em;
+		left: calc(50% - .3em/2);
+		top: calc(50% - .3em/2);
+		background: darkred;
+	}
+}
+
+.CircularProgressbar {
+	position: absolute;
+	top: 0;
+}
+
+.loading {
+	.CircularProgressbar { display: none; }
+	border-radius: 50%;
+	border: .05em dashed lime;
+	animation-name: spin;
+	animation-duration: 3s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+}
+
+@keyframes spin {
+	from {
+		transform: rotate(0turn);
+	}
+	to {
+		transform: rotate(1turn);
+	}
+}
+
+/////////////////////////////////////////////////////
+// RIGHT SIDE
+/////////////////////////////////////////////////////
 
 .stats {
 	color: white;
@@ -292,54 +360,3 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	}
 }
 
-#network-status {
-	position: absolute;
-	top: .25em;
-	right: .25em;
-	@include desktop {
-		font-size: 75px;
-	}
-	@include jumbo {
-		font-size: 75px;
-	}
-	width: 1em;
-	height: 1em;
-	box-sizing: border-box;
-	&.waiting {
-		cursor: pointer;
-	}
-	&.waiting:hover::before {
-		content: '';
-		display: block;
-		position: relative;
-		width: .3em;
-		height: .3em;
-		left: calc(50% - .3em/2);
-		top: calc(50% - .3em/2);
-		background: darkred;
-	}
-}
-
-.CircularProgressbar {
-	position: absolute;
-	top: 0;
-}
-
-.loading {
-	.CircularProgressbar { display: none; }
-	border-radius: 50%;
-	border: .05em dashed lime;
-	animation-name: spin;
-	animation-duration: 3s;
-	animation-timing-function: linear;
-	animation-iteration-count: infinite;
-}
-
-@keyframes spin {
-	from {
-		transform: rotate(0turn);
-	}
-	to {
-		transform: rotate(1turn);
-	}
-}
