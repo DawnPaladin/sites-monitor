@@ -21,7 +21,7 @@ h2 {
 	margin: 0.25em 0;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
 
 /////////////////////////////////////////////////////
 // INGREDIENTS
@@ -175,6 +175,18 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	&:last-child {
 		border-right: $thick-border;	
 	}
+}
+.tier {
+	font-size: .6em;
+	font-weight: bold;
+	position: absolute;
+	top: -0.75em;
+	left: 0;
+	z-index: 20;
+	text-shadow: 1px 1px 0 black,
+	            -1px -1px 0 black,
+					 1px -1px 0 black,
+				   -1px 1px 0 black;
 }
 
 .builds { // time since last build, displayed to the right of a System

@@ -37,6 +37,7 @@ export default class System extends Component {
 		}
 		this.formatTimeAgo = this.formatTimeAgo.bind(this);
 		this.notTooLongAgo = this.notTooLongAgo.bind(this);
+		this.tierAbbreviation = this.tierAbbreviation.bind(this);
 	}
 	formatTimeAgo(timestamp) {
 		if (isNaN(timestamp)) return '';
@@ -57,6 +58,14 @@ export default class System extends Component {
 		var currentTimestamp = now.valueOf();
 		const eightHours = 1000 * 60 * 60 * 8;
 		return (currentTimestamp - timestamp) < eightHours;
+	}
+	tierAbbreviation() { // development, production, QA, staging
+		var name = this.props.system.id.toLowerCase();
+		if (name.includes('dev')) return 'D';
+		if (name.includes(' prod')) return 'P';
+		if (name.includes('qa')) return 'T';
+		if (name.includes('staging') || name.includes('uat')) return 'S';
+		return '';
 	}
 	render() {
 		var servers = this.props.system.servers.map(server => (
@@ -88,6 +97,7 @@ export default class System extends Component {
 		}
 		return (
 			<div className="system">
+				<div className="tier">{this.tierAbbreviation()}</div>
 				<div title={this.props.system.id} className={"circle " + serviceColor[this.props.system.status]}></div>
 				<div className="rects">
 					{servers}
