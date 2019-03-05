@@ -54,6 +54,11 @@ class App extends Component {
 			this.setState({ networkStatus: "loading" });
 			Promise.all([ this.getLoadBalancerStatus(), this.getJenkinsStatus() ]).then((response) => {
 				const [ loadBalancerData, jenkinsData ] = response;
+				if (loadBalancerData.error === 'error') {
+					window.location = loadBalancerData.redirect;
+				} else if (jenkinsData.error === 'error') {
+					window.location = jenkinsData.redirect;
+				}
 				this.processLoadBalancerData(loadBalancerData, () => {
 					this.processJenkinsData(jenkinsData);
 				});
