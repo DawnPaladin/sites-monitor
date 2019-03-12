@@ -142,7 +142,7 @@ class App extends Component {
 			down: 0,
 		}
 		this.setState({ downedServices: [] });
-		if (simulateDownedService) groups[8].virtual_services[2].servers[1].operational_status = "out-of-service-health";
+		if (simulateDownedService) groups[8].virtual_services[3].servers[1].operational_status = "out-of-service-health";
 		groups.forEach(group => {
 			group.virtual_services.forEach(service => {
 				if (this.checkIfServiceIsDown(service)) {
