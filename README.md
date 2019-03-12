@@ -4,7 +4,7 @@ This is a site-status dashboard that my team projects on one wall of our office.
 
 ![Demo](demo.png)
 
-Each circle is a site/service; each rectangle is one of the servers holding it up. Each diamond is a Jenkins build. If something turns red, it has failed and you should go fix it. Data is fetched from the `loadBalancerUrl` and the `jenkinsUrl` (on lines 9-10 of src/App.jss) every 30 seconds. Data has been cached for this public demo.
+Each circle is a site/service; each rectangle is one of the servers holding it up. Each diamond is a Jenkins build. If something turns red, it has failed and you should go fix it. Data is fetched from the `loadBalancerUrl` and the `jenkinsUrl` (on lines 9-10 of src/App.jss) every 30 seconds. Data has been cached for this public demo, and the names of our servers have been redacted.
 
 Run `npm start` to start the development server. `npm run build` will build it for production.
 

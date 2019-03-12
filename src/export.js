@@ -9,7 +9,7 @@ export default function dumpLoadBalancer(lb) {
 				tier: service.tier,
 				minimum_notificate_real_server: service.minimum_notificate_real_server,
 				servers: service.servers.map(server => { return {
-					id: Math.floor(Math.random() * 100),
+					id: "SERVER_" + Math.floor(Math.random() * 100),
 					operational_status: server.operational_status,
 				}})
 			}})
