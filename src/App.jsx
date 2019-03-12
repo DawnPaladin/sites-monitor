@@ -297,7 +297,7 @@ class App extends Component {
 					</div>
 					<div className="legend">
 						<h2>Legend</h2>
-						<img src="/legend.svg" alt="legend" />
+						<img src="/sites-monitor/legend.svg" alt="legend" />
 					</div>
 					<JenkinsLog timestamps={this.state.timestamps} jobsByTimestamp={this.state.jobsByTimestamp} />
 				</div>
