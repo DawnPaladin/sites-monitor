@@ -4,15 +4,15 @@ self.__precacheManifest = [
     "url": "/sites-monitor/static/js/runtime~main.8c8fc125.js"
   },
   {
-    "revision": "a0b0e2692a16cf4497d2",
-    "url": "/sites-monitor/static/js/main.a0b0e269.chunk.js"
+    "revision": "ff14d3f4d659ec0423a7",
+    "url": "/sites-monitor/static/js/main.ff14d3f4.chunk.js"
   },
   {
     "revision": "462346ce108d5f92723b",
     "url": "/sites-monitor/static/js/1.462346ce.chunk.js"
   },
   {
-    "revision": "a0b0e2692a16cf4497d2",
+    "revision": "ff14d3f4d659ec0423a7",
     "url": "/sites-monitor/static/css/main.fd1b559f.chunk.css"
   },
   {
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/sites-monitor/static/css/1.c90e240d.chunk.css"
   },
   {
-    "revision": "0e6193b8124c0621ee979f2aa30b12a4",
+    "revision": "a3fff1a048dd828babb013a38d07dc07",
     "url": "/sites-monitor/index.html"
   }
 ];
