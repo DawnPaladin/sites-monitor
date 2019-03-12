@@ -12,7 +12,7 @@ export default class System extends Component {
 	static propTypes = {
 		system: PropTypes.shape({
 			servers: PropTypes.arrayOf(PropTypes.shape({
-				id: PropTypes.string.isRequired,
+				id: PropTypes.any.isRequired,
 				operational_status: PropTypes.string.isRequired,
 			})).isRequired,
 			id: PropTypes.string.isRequired,
