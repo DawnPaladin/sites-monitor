@@ -7,9 +7,10 @@
                "id": "test.hkipop.com",
                "name": "test.hkipop.com",
                "tier": "Testing",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 40,
+                     "id": 73,
                      "operational_status": "enable"
                   }
                ]
@@ -18,9 +19,10 @@
                "id": "ftps.hki.com",
                "name": "ftps.hki.com",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 52,
+                     "id": 46,
                      "operational_status": "enable"
                   }
                ]
@@ -34,13 +36,14 @@
                "id": "Canada",
                "name": "Canada",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 83,
+                     "id": 95,
                      "operational_status": "enable"
                   },
                   {
-                     "id": 41,
+                     "id": 33,
                      "operational_status": "enable"
                   }
                ]
@@ -49,13 +52,14 @@
                "id": "Corporate",
                "name": "Corporate",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 16,
+                     "id": 50,
                      "operational_status": "enable"
                   },
                   {
-                     "id": 94,
+                     "id": 5,
                      "operational_status": "enable"
                   }
                ]
@@ -64,21 +68,22 @@
                "id": "Global",
                "name": "Global",
                "tier": "Production",
+               "minimum_notificate_real_server": "2",
                "servers": [
                   {
-                     "id": 76,
+                     "id": 61,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 50,
+                     "id": 51,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 14,
+                     "id": 81,
                      "operational_status": "enable"
                   },
                   {
-                     "id": 98,
+                     "id": 96,
                      "operational_status": "enable"
                   }
                ]
@@ -87,13 +92,14 @@
                "id": "Latin_America",
                "name": "Latin_America",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 36,
+                     "id": 22,
                      "operational_status": "enable"
                   },
                   {
-                     "id": 20,
+                     "id": 90,
                      "operational_status": "enable"
                   }
                ]
@@ -102,13 +108,14 @@
                "id": "North_America",
                "name": "North_America",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 73,
+                     "id": 56,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 65,
+                     "id": 39,
                      "operational_status": "enable"
                   }
                ]
@@ -117,9 +124,10 @@
                "id": "Whiteboard_Editor",
                "name": "Whiteboard_Editor",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 41,
+                     "id": 36,
                      "operational_status": "enable"
                   }
                ]
@@ -133,9 +141,10 @@
                "id": "Jenkins_NA",
                "name": "Jenkins_NA",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 34,
+                     "id": 29,
                      "operational_status": "enable"
                   }
                ]
@@ -144,9 +153,10 @@
                "id": "jenkins_OLD",
                "name": "jenkins_OLD",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 44,
+                     "id": 69,
                      "operational_status": "enable"
                   }
                ]
@@ -160,13 +170,14 @@
                "id": "Express_Orders",
                "name": "Express_Orders",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 56,
+                     "id": 15,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 6,
+                     "id": 66,
                      "operational_status": "enable"
                   }
                ]
@@ -175,13 +186,14 @@
                "id": "Express_Orders_SSL",
                "name": "Express_Orders_SSL",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 47,
+                     "id": 71,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 9,
+                     "id": 46,
                      "operational_status": "enable"
                   }
                ]
@@ -190,9 +202,10 @@
                "id": "Orders_HKI_Express",
                "name": "Orders_HKI_Express",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 35,
+                     "id": 59,
                      "operational_status": "enable"
                   }
                ]
@@ -201,9 +214,10 @@
                "id": "Product_Showcase_Dev",
                "name": "Product_Showcase_Dev",
                "tier": "Development",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 8,
+                     "id": 97,
                      "operational_status": "enable"
                   }
                ]
@@ -212,9 +226,10 @@
                "id": "Product_Showcase_QA",
                "name": "Product_Showcase_QA",
                "tier": "Testing",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 72,
+                     "id": 53,
                      "operational_status": "enable"
                   }
                ]
@@ -223,9 +238,10 @@
                "id": "Product_Showcase_UAT",
                "name": "Product_Showcase_UAT",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 68,
+                     "id": 41,
                      "operational_status": "enable"
                   }
                ]
@@ -234,9 +250,10 @@
                "id": "Product_Showcase",
                "name": "Product_Showcase",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 47,
+                     "id": 17,
                      "operational_status": "enable"
                   }
                ]
@@ -245,9 +262,10 @@
                "id": "Product_Showcase_Express",
                "name": "Product_Showcase_Express",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 24,
+                     "id": 10,
                      "operational_status": "enable"
                   }
                ]
@@ -261,9 +279,10 @@
                "id": "Customer_Feedback_Legacy",
                "name": "Customer_Feedback_Legacy",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 39,
+                     "id": 53,
                      "operational_status": "enable"
                   }
                ]
@@ -272,9 +291,10 @@
                "id": "Dallas_Limesurvey",
                "name": "Dallas_Limesurvey",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 27,
+                     "id": 39,
                      "operational_status": "enable"
                   }
                ]
@@ -288,9 +308,10 @@
                "id": "Mobile_Forms_SSL",
                "name": "Mobile_Forms_SSL",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 21,
+                     "id": 11,
                      "operational_status": "enable"
                   }
                ]
@@ -299,9 +320,10 @@
                "id": "PM_Calendar",
                "name": "PM_Calendar",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 5,
+                     "id": 11,
                      "operational_status": "enable"
                   }
                ]
@@ -315,9 +337,10 @@
                "id": "UAT_Dallas_CAD_Time_Tracker",
                "name": "UAT_Dallas_CAD_Time_Tracker",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 33,
+                     "id": 19,
                      "operational_status": "enable"
                   }
                ]
@@ -326,13 +349,14 @@
                "id": "Dallas_CAD_Time_Tracker_Prod",
                "name": "Dallas_CAD_Time_Tracker_Prod",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 64,
+                     "id": 78,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 69,
+                     "id": 82,
                      "operational_status": "enable"
                   }
                ]
@@ -341,9 +365,10 @@
                "id": "UAT_Dallas_Eng_Time_Tracker",
                "name": "UAT_Dallas_Eng_Time_Tracker",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 16,
+                     "id": 2,
                      "operational_status": "enable"
                   }
                ]
@@ -352,13 +377,14 @@
                "id": "Dallas_Engineering_Time_Tracker_Prod",
                "name": "Dallas_Engineering_Time_Tracker_Prod",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 83,
+                     "id": 71,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 12,
+                     "id": 59,
                      "operational_status": "enable"
                   }
                ]
@@ -367,9 +393,10 @@
                "id": "DEV_Kimai_Time_Tracker",
                "name": "DEV_Kimai_Time_Tracker",
                "tier": "Development",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 20,
+                     "id": 17,
                      "operational_status": "enable"
                   }
                ]
@@ -378,9 +405,10 @@
                "id": "QA_Kimai_Time_Tracker",
                "name": "QA_Kimai_Time_Tracker",
                "tier": "Testing",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 90,
+                     "id": 49,
                      "operational_status": "enable"
                   }
                ]
@@ -389,9 +417,10 @@
                "id": "UAT_SLP_Eng_Time_Tracker",
                "name": "UAT_SLP_Eng_Time_Tracker",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 77,
+                     "id": 84,
                      "operational_status": "enable"
                   }
                ]
@@ -400,13 +429,14 @@
                "id": "SLP_Engineering_Time_Tracker",
                "name": "SLP_Engineering_Time_Tracker",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 30,
+                     "id": 0,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 37,
+                     "id": 96,
                      "operational_status": "enable"
                   }
                ]
@@ -415,13 +445,14 @@
                "id": "SLP_Sales_Time_Tracker",
                "name": "SLP_Sales_Time_Tracker",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 30,
+                     "id": 32,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 6,
+                     "id": 24,
                      "operational_status": "enable"
                   }
                ]
@@ -430,9 +461,10 @@
                "id": "UAT_SLP_Sales_Time_Tracker",
                "name": "UAT_SLP_Sales_Time_Tracker",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 12,
+                     "id": 85,
                      "operational_status": "enable"
                   }
                ]
@@ -446,9 +478,10 @@
                "id": "AR_Portal_Dev",
                "name": "AR_Portal_Dev",
                "tier": "Development",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 27,
+                     "id": 49,
                      "operational_status": "enable"
                   }
                ]
@@ -457,9 +490,10 @@
                "id": "AR_Portal_QA",
                "name": "AR_Portal_QA",
                "tier": "Testing",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 12,
+                     "id": 90,
                      "operational_status": "enable"
                   }
                ]
@@ -468,9 +502,10 @@
                "id": "AR_Portal_UAT",
                "name": "AR_Portal_UAT",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 75,
+                     "id": 77,
                      "operational_status": "enable"
                   }
                ]
@@ -479,9 +514,10 @@
                "id": "AR_Portal_Production",
                "name": "AR_Portal_Production",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 11,
+                     "id": 98,
                      "operational_status": "enable"
                   }
                ]
@@ -495,9 +531,10 @@
                "id": "CAD_Sites_DEV",
                "name": "CAD_Sites_DEV",
                "tier": "Development",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 44,
+                     "id": 59,
                      "operational_status": "enable"
                   }
                ]
@@ -506,9 +543,10 @@
                "id": "CAD_Sites_QA",
                "name": "CAD_Sites_QA",
                "tier": "Testing",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 32,
+                     "id": 91,
                      "operational_status": "enable"
                   }
                ]
@@ -517,9 +555,10 @@
                "id": "CAD_Sites_UAT",
                "name": "CAD_Sites_UAT",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 47,
+                     "id": 57,
                      "operational_status": "enable"
                   }
                ]
@@ -528,13 +567,14 @@
                "id": "CAD_Sites_Production",
                "name": "CAD_Sites_Production",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 0,
+                     "id": 2,
                      "operational_status": "enable"
                   },
                   {
-                     "id": 18,
+                     "id": 16,
                      "operational_status": "disable"
                   }
                ]
@@ -548,9 +588,10 @@
                "id": "PO_Approval_DEV",
                "name": "PO_Approval_DEV",
                "tier": "Development",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 82,
+                     "id": 76,
                      "operational_status": "enable"
                   }
                ]
@@ -559,9 +600,10 @@
                "id": "PO_Approval_QA",
                "name": "PO_Approval_QA",
                "tier": "Testing",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 54,
+                     "id": 87,
                      "operational_status": "enable"
                   }
                ]
@@ -570,9 +612,10 @@
                "id": "PO_Approval_UAT",
                "name": "PO_Approval_UAT",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 32,
+                     "id": 92,
                      "operational_status": "enable"
                   }
                ]
@@ -581,13 +624,14 @@
                "id": "PO_Approval_Production",
                "name": "PO_Approval_Production",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 78,
+                     "id": 21,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 85,
+                     "id": 14,
                      "operational_status": "enable"
                   }
                ]
@@ -601,9 +645,10 @@
                "id": "Warranty_Development",
                "name": "Warranty_Development",
                "tier": "Development",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 85,
+                     "id": 65,
                      "operational_status": "enable"
                   }
                ]
@@ -612,9 +657,10 @@
                "id": "Warranty_QA",
                "name": "Warranty_QA",
                "tier": "Testing",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 77,
+                     "id": 74,
                      "operational_status": "enable"
                   }
                ]
@@ -623,9 +669,10 @@
                "id": "Warranty_UAT",
                "name": "Warranty_UAT",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 42,
+                     "id": 10,
                      "operational_status": "enable"
                   }
                ]
@@ -634,13 +681,14 @@
                "id": "Warranty_Production",
                "name": "Warranty_Production",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 8,
+                     "id": 36,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 60,
+                     "id": 40,
                      "operational_status": "enable"
                   }
                ]
@@ -654,13 +702,14 @@
                "id": "Time_Tracker_Development",
                "name": "Time_Tracker_Development",
                "tier": "Development",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 1,
+                     "id": 88,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 17,
+                     "id": 79,
                      "operational_status": "enable"
                   }
                ]
@@ -669,13 +718,14 @@
                "id": "Time_Tracker_QA",
                "name": "Time_Tracker_QA",
                "tier": "Testing",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 57,
+                     "id": 82,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 6,
+                     "id": 12,
                      "operational_status": "enable"
                   }
                ]
@@ -684,13 +734,14 @@
                "id": "Time_Tracker_UAT",
                "name": "Time_Tracker_UAT",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 97,
+                     "id": 49,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 29,
+                     "id": 96,
                      "operational_status": "enable"
                   }
                ]
@@ -699,13 +750,14 @@
                "id": "Time_Tracker_Production",
                "name": "Time_Tracker_Production",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 66,
+                     "id": 30,
                      "operational_status": "disable"
                   },
                   {
-                     "id": 33,
+                     "id": 38,
                      "operational_status": "enable"
                   }
                ]
@@ -719,9 +771,10 @@
                "id": "Credit_Notes_DEV",
                "name": "Credit_Notes_DEV",
                "tier": "Development",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 0,
+                     "id": 9,
                      "operational_status": "enable"
                   }
                ]
@@ -730,9 +783,10 @@
                "id": "Credit_Notes_QA",
                "name": "Credit_Notes_QA",
                "tier": "Testing",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 12,
+                     "id": 99,
                      "operational_status": "enable"
                   }
                ]
@@ -741,9 +795,10 @@
                "id": "Credit_Notes_UAT",
                "name": "Credit_Notes_UAT",
                "tier": "Staging",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 83,
+                     "id": 92,
                      "operational_status": "enable"
                   }
                ]
@@ -752,9 +807,10 @@
                "id": "Credit_Notes_PROD",
                "name": "Credit_Notes_PROD",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 99,
+                     "id": 13,
                      "operational_status": "enable"
                   }
                ]
@@ -768,9 +824,10 @@
                "id": "Engineering",
                "name": "Engineering",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 20,
+                     "id": 37,
                      "operational_status": "enable"
                   }
                ]
@@ -779,39 +836,7 @@
                "id": "Facilities",
                "name": "Facilities",
                "tier": "Production",
-               "servers": [
-                  {
-                     "id": 49,
-                     "operational_status": "enable"
-                  }
-               ]
-            },
-            {
-               "id": "HKDallasRedirect",
-               "name": "HKDallasRedirect",
-               "tier": "Production",
-               "servers": [
-                  {
-                     "id": 39,
-                     "operational_status": "enable"
-                  }
-               ]
-            },
-            {
-               "id": "HKI_Engineering",
-               "name": "HKI_Engineering",
-               "tier": "Production",
-               "servers": [
-                  {
-                     "id": 15,
-                     "operational_status": "enable"
-                  }
-               ]
-            },
-            {
-               "id": "HKI_SLP_Engineering",
-               "name": "HKI_SLP_Engineering",
-               "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
                      "id": 4,
@@ -820,12 +845,49 @@
                ]
             },
             {
+               "id": "HKDallasRedirect",
+               "name": "HKDallasRedirect",
+               "tier": "Production",
+               "minimum_notificate_real_server": "0",
+               "servers": [
+                  {
+                     "id": 36,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "HKI_Engineering",
+               "name": "HKI_Engineering",
+               "tier": "Production",
+               "minimum_notificate_real_server": "1",
+               "servers": [
+                  {
+                     "id": 39,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
+               "id": "HKI_SLP_Engineering",
+               "name": "HKI_SLP_Engineering",
+               "tier": "Production",
+               "minimum_notificate_real_server": "1",
+               "servers": [
+                  {
+                     "id": 23,
+                     "operational_status": "enable"
+                  }
+               ]
+            },
+            {
                "id": "HealthSafety",
                "name": "HealthSafety",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 43,
+                     "id": 38,
                      "operational_status": "enable"
                   }
                ]
@@ -834,9 +896,10 @@
                "id": "IT",
                "name": "IT",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 9,
+                     "id": 70,
                      "operational_status": "enable"
                   }
                ]
@@ -845,9 +908,10 @@
                "id": "Purchasing",
                "name": "Purchasing",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 0,
+                     "id": 69,
                      "operational_status": "enable"
                   }
                ]
@@ -856,9 +920,10 @@
                "id": "SLP_Purchasing",
                "name": "SLP_Purchasing",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 13,
+                     "id": 35,
                      "operational_status": "enable"
                   }
                ]
@@ -867,9 +932,10 @@
                "id": "Shipping",
                "name": "Shipping",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 30,
+                     "id": 81,
                      "operational_status": "enable"
                   }
                ]
@@ -883,9 +949,10 @@
                "id": "APMEA",
                "name": "APMEA",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 34,
+                     "id": 73,
                      "operational_status": "enable"
                   }
                ]
@@ -894,9 +961,10 @@
                "id": "Engineering_Docs",
                "name": "Engineering_Docs",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 5,
+                     "id": 94,
                      "operational_status": "enable"
                   }
                ]
@@ -905,9 +973,10 @@
                "id": "FAB",
                "name": "FAB",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 11,
+                     "id": 76,
                      "operational_status": "enable"
                   }
                ]
@@ -916,9 +985,10 @@
                "id": "Orion",
                "name": "Orion",
                "tier": "Production",
+               "minimum_notificate_real_server": "1",
                "servers": [
                   {
-                     "id": 22,
+                     "id": 52,
                      "operational_status": "enable"
                   }
                ]
@@ -932,9 +1002,10 @@
                "id": "NA_PDF_Viewer",
                "name": "NA_PDF_Viewer",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 19,
+                     "id": 52,
                      "operational_status": "enable"
                   }
                ]
@@ -948,9 +1019,10 @@
                "id": "Sites_Monitor",
                "name": "Sites_Monitor",
                "tier": "Production",
+               "minimum_notificate_real_server": "0",
                "servers": [
                   {
-                     "id": 82,
+                     "id": 55,
                      "operational_status": "enable"
                   }
                ]
