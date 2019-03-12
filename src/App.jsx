@@ -5,6 +5,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import './App.scss';
 import System from './System';
 import JenkinsLog from './JenkinsLog';
+import dumpLoadBalancer from './export';
 
 const loadBalancerUrl = "/sites-monitor/load-balancer.json";
 const jenkinsUrl = "/sites-monitor/jenkins.json";
@@ -12,6 +13,7 @@ const updateFrequency = 30; // seconds to wait between data refreshes
 const numJenkinsBuildsToShow = 15;
 const simulateDownedService = true;
 const debugJenkins = false;
+const exportData = false;
 const serverColors = {
 	enable: "green",
 	disable: "grey",
@@ -54,6 +56,7 @@ class App extends Component {
 			this.setState({ networkStatus: "loading" });
 			Promise.all([ this.getLoadBalancerStatus(), this.getJenkinsStatus() ]).then((response) => {
 				const [ loadBalancerData, jenkinsData ] = response;
+				if (exportData) console.log(dumpLoadBalancer(loadBalancerData));
 				if (loadBalancerData.error === 'error') {
 					window.location = loadBalancerData.redirect;
 				} else if (jenkinsData.error === 'error') {
