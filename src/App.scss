@@ -34,6 +34,8 @@ h2 {
 	@media (min-width: 1800px) { @content; }
 }
 
+$base-outline-color: hsla(0, 0, 0, .55);
+
 .green {
 	background: rgb(0, 255, 0);
 }
@@ -53,26 +55,10 @@ h2 {
 	color: rgb(111,111,111);
 }
 
-.circle {
-	display: inline-block;
-	position: absolute;
-	bottom: 0;
-	box-sizing: border-box;
-	width: 1em;
-	height: 1em;	
-	border: .1em solid rgba(0, 0, 0, .75);
-	border-radius: 50%;
-}
-.square {
-	display: inline-block;
-	width: .8em;
-	height: .8em;	
-	border: .1em solid rgba(0, 0, 0, .75);
-}
 .diamond {
 	width: 0.15em;
 	height: 0.15em;
-	border: 0.09em solid rgba(0, 0, 0, .75);
+	border: 0.09em solid $base-outline-color;
 	transform: rotate(45deg);
 	top: 0.65em;
 	left: 0.35em;
@@ -118,12 +104,23 @@ h2 {
 	}
 }
 
-.system .red.circle::before { // flashing lens flare behind downed sites
+.circle {
+	display: inline-block;
+	position: absolute;
+	bottom: 0;
+	box-sizing: border-box;
+	width: 1em;
+	height: 1em;	
+	border: .1em solid $base-outline-color;
+	border-radius: 50%;
+}
+
+.system.downed::before { // flashing lens flare behind downed sites
 	content: '';
 	position: absolute;
 	width: 1.5em;
 	height: 4em;
-	left: -.35em;
+	left: -.22em;
 	top: -1.5em;
 	z-index: -1;
 	opacity: 1;
@@ -176,17 +173,44 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 		border-right: $thick-border;	
 	}
 }
-.tier {
-	font-size: .6em;
-	font-weight: bold;
-	position: absolute;
-	top: -0.75em;
-	left: 0;
-	z-index: 20;
-	text-shadow: 1px 1px 0 black,
-	            -1px -1px 0 black,
-					 1px -1px 0 black,
-				   -1px 1px 0 black;
+
+@mixin circle-outline() {
+	position: relative;
+	height: .4em;
+	width: .8em;
+	bottom: .4em;
+	border-radius: 1em 1em 0 0;
+	background: black;
+	display: inline-block;
+	overflow: hidden;
+}
+.circle-outline-green {
+	@include circle-outline();
+	border: .1em solid #024601;
+}
+.circle-outline-red {
+	@include circle-outline();
+	border: .1em solid #400000;
+	
+}
+@mixin tier() {
+	width: 100%;
+	height: 100%;
+}
+.tier-development {
+	@include tier();
+	clip-path: inset(0 66% 0 0);
+}
+.tier-testing {
+	@include tier();
+	clip-path: inset(0 33% 0 33%);
+}
+.tier-staging {
+	@include tier();
+	clip-path: inset(0 0 0 66%);
+}
+.tier-production {
+	@include tier();
 }
 
 .builds { // time since last build, displayed to the right of a System
@@ -276,74 +300,90 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 	color: white;
 	font-family: 'Roboto', sans-serif;
 	line-height: 1.75em;
+	max-width: 50%;
 	@include desktop {
 		font-size: 24px;
 	}
 	@include jumbo {
 		font-size: 38px;
 	}
-	.circle, .square {
-		border: .15em solid black;
+	.half-circle, .square {
+		border: .15em solid rgba(0, 0, 0, .75);
 	}
-}
-.stat-line {
-	color: black;
-	text-align: center;
-	padding: 0 1em;
-	&>* {
-		position: relative;
-		z-index: 1;;
-	}
-	.circle, .square {
-		position: relative;
-		margin: 0 0.25em;
-		bottom: -.125em;
-	}
-}
-.stat-line-green {
-	background: hsl(115, 100%, 73.9%);
-	@include scan-lines(0.25);
-}
-.stat-line-grey {
-	background: #BEBEBE;
-	@include scan-lines(0.2);
-}
-.downed {
-	background: hsl(0, 100%, 80%);
-	@include scan-lines(0.25);
-	z-index: -1;
-}
-.downed-services {
-	color: black;
-	padding: 0 1em;
-	.circle, .square {
-		position: relative;
-		margin: 0 0.25em;
-		bottom: -.55em;
-		z-index: 1;
-		border: .25em solid black;
-	}
-	.circle {
-		height: 1.75em;
-		width: 1.75em;
+	.half-circle {
+		display: inline-block;
+		position: absolute;
+		bottom: 0;
+		box-sizing: border-box;
+		width: 1.25em;
+		height: .8em;	
+		border-radius: 1em 1em 0 0;
 	}
 	.square {
-		height: 1.3em;
-		width: 1.3em;
-	}
-	.downed-service {
-		padding-bottom: 1em;
-	}
-	.downed-service-name, .server-name {
-		position: relative;
 		display: inline-block;
-		background: white;
-		padding-left: 1.25em;
-		padding-right: .5em;
-		margin-left: -1em;
+		width: .8em;
+		height: .8em;	
 	}
-	.downed-service-name {
-		font-weight: bold;
+		
+	.stat-line {
+		color: black;
+		text-align: center;
+		padding: 0 1em;
+		&>* {
+			position: relative;
+			z-index: 1;;
+		}
+		.circle, .half-circle, .square {
+			position: relative;
+			margin: 0 0.25em;
+			bottom: -.125em;
+		}
+	}
+	.stat-line-green {
+		background: hsla(115, 100%, 73.9%, 0.85);
+		@include scan-lines(0.35);
+	}
+	.stat-line-grey {
+		background: hsla(0, 0%, 75%, 0.85);
+		@include scan-lines(0.4);
+	}
+	.downed {
+		background: hsla(0, 100%, 80%, .85);
+		@include scan-lines(0.4);
+		z-index: -1;
+	}
+	.downed-services {
+		color: black;
+		padding: 0 1em;
+		.circle, .square {
+			position: relative;
+			margin: 0 0.25em;
+			bottom: -.55em;
+			z-index: 1;
+			border: .25em solid black;
+		}
+		.circle {
+			height: 1.75em;
+			width: 1.75em;
+		}
+		.square {
+			height: 1.3em;
+			width: 1.3em;
+		}
+		.downed-service {
+			padding-bottom: 1em;
+		}
+		.downed-service-name, .server-name {
+			position: relative;
+			display: inline-block;
+			background: white;
+			padding-left: 1.25em;
+			padding-right: .5em;
+			margin-left: -1em;
+		}
+		.downed-service-name {
+			font-weight: bold;
+		}
 	}
 }
 
@@ -353,6 +393,7 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 
 .legend img {
 	height: 5em;
+	width: 100%;
 }
 
 .log-line {

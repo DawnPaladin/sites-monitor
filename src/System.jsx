@@ -37,7 +37,7 @@ export default class System extends Component {
 		}
 		this.formatTimeAgo = this.formatTimeAgo.bind(this);
 		this.notTooLongAgo = this.notTooLongAgo.bind(this);
-		this.tierAbbreviation = this.tierAbbreviation.bind(this);
+		this.tierIndicator = this.tierIndicator.bind(this);
 	}
 	formatTimeAgo(timestamp) {
 		if (isNaN(timestamp)) return '';
@@ -59,13 +59,10 @@ export default class System extends Component {
 		const eightHours = 1000 * 60 * 60 * 8;
 		return (currentTimestamp - timestamp) < eightHours;
 	}
-	tierAbbreviation() { // development, production, QA, staging
-		var name = this.props.system.id.toLowerCase();
-		if (name.includes('dev')) return 'D';
-		if (name.includes(' prod')) return 'P';
-		if (name.includes('qa')) return 'T';
-		if (name.includes('staging') || name.includes('uat')) return 'S';
-		return '';
+	tierIndicator() {
+		var tier = this.props.system.tier;
+		var cssClass = "tier-"+tier.toLowerCase() + ' ' + serviceColor[this.props.system.status];
+		return tier ? <div className={cssClass} title={this.props.system.id}></div> : <div></div>;
 	}
 	render() {
 		var servers = this.props.system.servers.map(server => (
@@ -95,10 +92,12 @@ export default class System extends Component {
 				}
 			});
 		}
+		
 		return (
-			<div className="system">
-				<div className="tier">{this.tierAbbreviation()}</div>
-				<div title={this.props.system.id} className={"circle " + serviceColor[this.props.system.status]}></div>
+			<div className={this.props.system.status === "down" ? "downed system" : "system"}>
+				<div className={"circle-outline-" + serviceColor[this.props.system.status]}>
+					{this.tierIndicator()}
+				</div>
 				<div className="rects">
 					{servers}
 				</div>

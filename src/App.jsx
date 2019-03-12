@@ -271,7 +271,7 @@ class App extends Component {
 				<div className="stats">
 					<div className="stat-line stat-line-green">
 						<strong>UP: </strong>
-						<span className="circle green"></span>
+						<span className="half-circle green"></span>
 						<span>{this.state.serviceStats.up} services,</span>
 						<span className="square green"></span>
 						<span>{this.state.serverStats.up} servers</span>
@@ -285,7 +285,7 @@ class App extends Component {
 						<div className="stat-line stat-line-red">
 							{simulateDownedService && <strong>**SIMULATED**<br/></strong>}
 							<strong>DOWN: </strong>
-							<span className="circle red"></span>
+							<span className="half-circle red"></span>
 							<span>{this.state.serviceStats.down} services,</span>
 							<span className="square red"></span>
 							<span>{this.state.serverStats.down} servers</span>
