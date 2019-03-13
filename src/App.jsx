@@ -70,6 +70,7 @@ class App extends Component {
 			networkText: "Loading...",
 			jobsByTimestamp: {},
 			timestamps: [],
+			showLegend: true,
 		};
 		this.fetchLoopController = this.fetchLoopController.bind(this);
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
@@ -117,6 +118,7 @@ class App extends Component {
 			if (this.state.timeSinceLastUpdate > updateFrequency - 1) {
 				stop();
 				start();
+				this.setState({ showLegend: false });
 			} else {
 				this.setState({ timeSinceLastUpdate: this.state.timeSinceLastUpdate + 1 });
 			}
@@ -334,10 +336,12 @@ class App extends Component {
 							</div>
 						</div>
 					</ErrorBoundary>
-					<div className="legend">
-						<h2>Legend</h2>
-						<img src="/sites-monitor/legend.svg" alt="legend" />
-					</div>
+					{ this.state.showLegend && 
+						<div className="legend">
+							<h2>Legend</h2>
+							<img src="/sites-monitor/legend.svg" alt="legend" />
+						</div>
+					}
 					<ErrorBoundary>
 						<JenkinsLog timestamps={this.state.timestamps} jobsByTimestamp={this.state.jobsByTimestamp} />
 					</ErrorBoundary>
