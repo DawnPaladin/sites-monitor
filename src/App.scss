@@ -215,7 +215,8 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 }
 
 .builds { // time since last build, displayed to the right of a System
-	margin-left: 1.1em;
+	display: inline-block;
+	margin-left: 0.1em;
 	line-height: 1.55em;
 }
 .build-viz {
