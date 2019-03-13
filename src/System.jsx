@@ -42,7 +42,7 @@ export default class System extends Component {
 	formatTimeAgo(timestamp) {
 		if (isNaN(timestamp)) return '';
 		
-		var seconds = Math.floor((new Date() - timestamp) / 1000);
+		var seconds = Math.floor((new Date('Feb 27, 2019 12:19:00') - timestamp) / 1000);
 		
 		// hours
 		var interval = Math.floor(seconds / 3600);
@@ -54,7 +54,7 @@ export default class System extends Component {
 		return `${seconds}s`;
 	}
 	notTooLongAgo(timestamp) {
-		var now = new Date();
+		var now = new Date('Feb 27, 2019 12:19:00');
 		var currentTimestamp = now.valueOf();
 		const eightHours = 1000 * 60 * 60 * 8;
 		return (currentTimestamp - timestamp) < eightHours;
