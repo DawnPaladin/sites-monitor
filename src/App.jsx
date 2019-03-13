@@ -10,14 +10,45 @@ import dumpLoadBalancer from './export';
 const loadBalancerUrl = "/sites-monitor/load-balancer.json";
 const jenkinsUrl = "/sites-monitor/jenkins.json";
 const updateFrequency = 30; // seconds to wait between data refreshes
-const numJenkinsBuildsToShow = 15;
+
 const simulateDownedService = true;
+const numJenkinsBuildsToShow = 10;
 const debugJenkins = false;
 const exportData = false;
 const serverColors = {
-	enable: "green",
-	disable: "grey",
+	"enable": "green",
+	"disable": "grey",
 	"out-of-service-health": "red"
+}
+
+class ErrorBoundary extends Component {
+	constructor(props) {
+		super(props);
+		this.state = { 
+			hasError: false,
+		};
+	}
+	
+	static getDerivedStateFromError(error) {
+		// Update state so the next render will show the fallback UI.
+		return { 
+			hasError: true,
+		};
+	}
+	
+	componentDidCatch(error, info) {
+		console.warn(error);
+	}
+	
+	render() {
+		if (this.state.hasError) {
+			return <div className="error">
+				<h1>Error</h1>
+			</div>
+		}
+		
+		return this.props.children;
+	}
 }
 
 class App extends Component {
@@ -218,9 +249,11 @@ class App extends Component {
 				if (!jobMatched) {
 					unmatchedJobs.push(job);
 				}
-				let timestamp = job.builds[0].timestamp;
-				state.timestamps.push(timestamp);
-				state.jobsByTimestamp[timestamp] = job;
+				if (job.builds.length) {
+					let timestamp = job.builds[0].timestamp;
+					state.timestamps.push(timestamp);
+					state.jobsByTimestamp[timestamp] = job;
+				}
 			}
 			if (debugJenkins) {
 				console.log("Matched", jobsMatched, "Jenkins jobs with Load Balancer services");
@@ -250,56 +283,64 @@ class App extends Component {
 		return (
 			<div id="App">
 				<div className="monitor">
-					<ul className="groups">
-						{groups}
-					</ul>
-					<div id="network-status" className={this.state.networkStatus} onClick={this.fetchLoopController().stop}>
-						<CircularProgressbar percentage={progressbarPercentage} styles={{
-							path: { 
-								stroke: 'lime',
-								strokeWidth: '.05em',
-								strokeLinecap: 'butt',
-								strokeDasharray: '4'
-							},
-							trail: {
-								stroke: 'hsl(0, 0%, 10%)',
-								strokeWidth: '0.05em',
-							},
-						}}/>
-					</div>
+					<ErrorBoundary>
+						<ul className="groups">
+							{groups}
+						</ul>
+					</ErrorBoundary>
+					<ErrorBoundary>
+						<div id="network-status" className={this.state.networkStatus} onClick={this.fetchLoopController().stop}>
+							<CircularProgressbar percentage={progressbarPercentage} styles={{
+								path: { 
+									stroke: 'lime',
+									strokeWidth: '.05em',
+									strokeLinecap: 'butt',
+									strokeDasharray: '4'
+								},
+								trail: {
+									stroke: 'hsl(0, 0%, 10%)',
+									strokeWidth: '0.05em',
+								},
+							}}/>
+						</div>
+					</ErrorBoundary>
 				</div>
 				<div className="stats">
-					<div className="stat-line stat-line-green">
-						<strong>UP: </strong>
-						<span className="half-circle green"></span>
-						<span>{this.state.serviceStats.up} services,</span>
-						<span className="square green"></span>
-						<span>{this.state.serverStats.up} servers</span>
-					</div>
-					<div className="stat-line stat-line-grey">
-						<strong>DISABLED: </strong>
-						<span className="square grey"></span>
-						<span>{this.state.serverStats.disabled} servers</span>
-					</div>
-					<div className="downed">
-						<div className="stat-line stat-line-red">
-							{simulateDownedService && <strong>**SIMULATED**<br/></strong>}
-							<strong>DOWN: </strong>
-							<span className="half-circle red"></span>
-							<span>{this.state.serviceStats.down} services,</span>
-							<span className="square red"></span>
-							<span>{this.state.serverStats.down} servers</span>
-							
+					<ErrorBoundary>
+						<div className="stat-line stat-line-green">
+							<strong>UP: </strong>
+							<span className="half-circle green"></span>
+							<span>{this.state.serviceStats.up} services,</span>
+							<span className="square green"></span>
+							<span>{this.state.serverStats.up} servers</span>
 						</div>
-						<div className="downed-services">
-							{downedServices}
+						<div className="stat-line stat-line-grey">
+							<strong>DISABLED: </strong>
+							<span className="square grey"></span>
+							<span>{this.state.serverStats.disabled} servers</span>
 						</div>
-					</div>
+						<div className="downed">
+							<div className="stat-line stat-line-red">
+								{simulateDownedService && <strong>**SIMULATED**<br/></strong>}
+								<strong>DOWN: </strong>
+								<span className="half-circle red"></span>
+								<span>{this.state.serviceStats.down} services,</span>
+								<span className="square red"></span>
+								<span>{this.state.serverStats.down} servers</span>
+								
+							</div>
+							<div className="downed-services">
+								{downedServices}
+							</div>
+						</div>
+					</ErrorBoundary>
 					<div className="legend">
 						<h2>Legend</h2>
 						<img src="/sites-monitor/legend.svg" alt="legend" />
 					</div>
-					<JenkinsLog timestamps={this.state.timestamps} jobsByTimestamp={this.state.jobsByTimestamp} />
+					<ErrorBoundary>
+						<JenkinsLog timestamps={this.state.timestamps} jobsByTimestamp={this.state.jobsByTimestamp} />
+					</ErrorBoundary>
 				</div>
 			</div>
 		);

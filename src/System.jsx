@@ -76,7 +76,12 @@ export default class System extends Component {
 		
 		var jenkinsBuilds = [];
 		var diamond = null;
-		if (this.props.system.jenkinsJobs && this.props.system.jenkinsJobs.length) {
+		if (
+			this.props.system.jenkinsJobs && 
+			this.props.system.jenkinsJobs.length && 
+			this.props.system.jenkinsJobs.builds && 
+			this.props.system.jenkinsJobs.builds.length
+		) {
 			diamond = <Diamond buildResult={this.props.system.jenkinsJobs[0].builds[0].result} />
 			
 			jenkinsBuilds = this.props.system.jenkinsJobs.map(job => {
