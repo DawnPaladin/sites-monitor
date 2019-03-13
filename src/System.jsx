@@ -79,8 +79,8 @@ export default class System extends Component {
 		if (
 			this.props.system.jenkinsJobs && 
 			this.props.system.jenkinsJobs.length && 
-			this.props.system.jenkinsJobs.builds && 
-			this.props.system.jenkinsJobs.builds.length
+			this.props.system.jenkinsJobs[0].builds &&
+			this.props.system.jenkinsJobs[0].builds.length
 		) {
 			diamond = <Diamond buildResult={this.props.system.jenkinsJobs[0].builds[0].result} />
 			
