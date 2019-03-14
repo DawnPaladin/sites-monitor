@@ -12,7 +12,7 @@ const jenkinsUrl = "/sites-monitor/jenkins.json";
 const updateFrequency = 30; // seconds to wait between data refreshes
 
 const simulateDownedService = true;
-const numJenkinsBuildsToShow = 10;
+const numJenkinsBuildsToShow = 15;
 const debugJenkins = false;
 const exportData = false;
 const serverColors = {
