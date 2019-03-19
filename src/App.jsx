@@ -353,12 +353,14 @@ class App extends Component {
 
 const Group = props => {
 	var systems = props.group.virtual_services.map(system => <System key={system.name} system={system} debugJenkins={debugJenkins} serverColors={serverColors} />);
-	return (
-		<li className="group">
-			{props.group.id}
-			{systems}
-		</li>
-	)
+	return systems.length > 0 ?
+		(
+			<li className="group">
+				{props.group.id}
+				{systems}
+			</li>
+		) :
+		( <div/> )
 };
 
 class DownedService extends Component {
