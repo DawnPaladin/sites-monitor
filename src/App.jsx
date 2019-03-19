@@ -9,9 +9,10 @@ import dumpLoadBalancer from './export';
 
 const loadBalancerUrl = "/sites-monitor/load-balancer.json";
 const jenkinsUrl = "/sites-monitor/jenkins.json";
-const updateFrequency = 30; // seconds to wait between data refreshes
 
 const simulateDownedService = true;
+const updateFrequency = 15; // seconds to wait between data refreshes
+const updateFrequencyWhenDown = 5; // seconds to wait between data refreshes
 const numJenkinsBuildsToShow = 15;
 const debugJenkins = false;
 const exportData = false;
@@ -115,7 +116,13 @@ class App extends Component {
 			});
 		}
 		const tick = () => {
-			if (this.state.timeSinceLastUpdate > updateFrequency - 1) {
+			var frequencyToCheck = updateFrequency;
+			if((this.state.serverStats != null && this.state.serviceStats != null )
+				&& (this.state.serverStats.down > 0 || this.state.serviceStats.down > 0))
+			{
+				frequencyToCheck = updateFrequencyWhenDown;
+			}
+			if (this.state.timeSinceLastUpdate > frequencyToCheck - 1) {
 				stop();
 				start();
 				this.setState({ showLegend: false });
