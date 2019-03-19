@@ -1,13 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import resultText from './App'
 import Diamond from './Diamond';
-
-const resultText = { 
-	"SUCCESS": "succeeded",
-	"FAILURE": "failed",
-	"ABORTED": "aborted",
-}
 
 export default class JenkinsLog extends React.Component {
 	static propTypes = {

@@ -11,6 +11,11 @@ const loadBalancerUrl = "/sites-monitor/load-balancer.json";
 const jenkinsUrl = "/sites-monitor/jenkins.json";
 
 const simulateDownedService = true;
+export const resultText = {
+	"SUCCESS": "succeeded",
+	"FAILURE": "failed",
+	"ABORTED": "aborted",
+}
 const updateFrequency = 15; // seconds to wait between data refreshes
 const updateFrequencyWhenDown = 5; // seconds to wait between data refreshes
 const numJenkinsBuildsToShow = 15;
@@ -116,13 +121,13 @@ class App extends Component {
 			});
 		}
 		const tick = () => {
-			var frequencyToCheck = updateFrequency;
-			if((this.state.serverStats != null && this.state.serviceStats != null )
-				&& (this.state.serverStats.down > 0 || this.state.serviceStats.down > 0))
+			this.frequencyToCheck = updateFrequency;
+			if((this.state.serverStats != null && this.state.serviceStats != null && this.state.jenkinsStats != null)
+				&& (this.state.serverStats.down > 0 || this.state.serviceStats.down > 0 || this.state.jenkinsStats.building >0 ))
 			{
-				frequencyToCheck = updateFrequencyWhenDown;
+				this.frequencyToCheck = updateFrequencyWhenDown;
 			}
-			if (this.state.timeSinceLastUpdate > frequencyToCheck - 1) {
+			if (this.state.timeSinceLastUpdate > this.frequencyToCheck - 1) {
 				stop();
 				start();
 				this.setState({ showLegend: false });
@@ -222,6 +227,12 @@ class App extends Component {
 			arr.push(`(${lastWord})`);
 			return arr.join(' ');
 		}
+
+		var jenkinsStats = {
+			up: 0,
+			down: 0,
+			building: 0
+		}
 		// match jobs from Jenkins with services from Load Balancer
 		this.setState(function(state) {
 			const groups = state.groups;
@@ -252,6 +263,16 @@ class App extends Component {
 							service.jenkinsJobs.push(job);
 							jobMatched = true;
 							if (debugJenkins) { jobsMatched += 1; }
+							if(job.builds.length >0)
+							{
+								switch(resultText[job.builds[0].result])
+								{
+									case 'succeeded':  jenkinsStats.up += 1; break;
+									case 'failed':  jenkinsStats.down += 1; break;
+									case 'aborted':   break;
+									default: jenkinsStats.building += 1; break; /*null is building*/
+								}
+							}
 						}
 					});
 				});
@@ -271,6 +292,8 @@ class App extends Component {
 			state.timestamps.sort();
 			state.timestamps.reverse();
 			state.timestamps = state.timestamps.slice(0, numJenkinsBuildsToShow);
+
+			this.setState({ jenkinsStats: jenkinsStats});
 			
 		});		
 	}
@@ -287,7 +310,7 @@ class App extends Component {
 			groups = <div className="network-text">{this.state.networkText}</div>
 		}
 		var downedServices = this.state.downedServices.map(service => <DownedService service={service} key={service.id} />);
-		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/updateFrequency;
+		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/this.frequencyToCheck;
 		
 		return (
 			<div id="App">
