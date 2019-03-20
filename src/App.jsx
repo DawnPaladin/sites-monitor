@@ -409,4 +409,23 @@ class DownedService extends Component {
 	}
 }
 
+var j;
+var justHidden = false;
+document.onmousemove = function () {
+	if (!justHidden) {
+		justHidden = false;
+		clearTimeout(j);
+		document.getElementById('root').style.cursor = 'default';
+		j = setTimeout(hide, 1000);
+	}
+};
+
+function hide() {
+	document.getElementById('root').style.cursor = 'none';
+	justHidden = true;
+	setTimeout(function () {
+		justHidden = false;
+	}, 500);
+}
+
 export default App;
