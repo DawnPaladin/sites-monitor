@@ -6,6 +6,7 @@ import './App.scss';
 import System from './System';
 import JenkinsLog from './JenkinsLog';
 import dumpLoadBalancer from './export';
+import fetchWithTimeout from './fetchWithTimeout';
 
 const loadBalancerUrl = "/sites-monitor/load-balancer.json";
 const jenkinsUrl = "/sites-monitor/jenkins.json";
@@ -105,7 +106,7 @@ class App extends Component {
 				});
 			}, (error) => { 
 				this.handleNetworkErr(error);
-			}).then(() => {
+			}).finally(() => {
 				this.setState({
 					fetchLoop: setInterval(tick, 1000),
 					timeSinceLastUpdate: 0,
@@ -146,13 +147,19 @@ class App extends Component {
 		return serversDown > 0 && serversDown >= threshold;
 	}
 	getLoadBalancerStatus() {
-		return fetch(loadBalancerUrl)
+		return fetchWithTimeout(loadBalancerUrl, 15000)
 			.then(response => {
-				if (response.ok) {
+				if (response === undefined) {
+					this.handleNetworkErr({ message: "Load Balancer is not responding"});
+					return false;
+				} else if (response.ok) {
 					return response.json();
 				} else {
 					this.handleNetworkErr(response);
 				}
+			})
+			.catch(err => {
+				this.handleNetworkErr(err);
 			})
 		;
 	}
@@ -211,9 +218,12 @@ class App extends Component {
 		this.setState({ serviceStats: serviceStats, serverStats: serverStats }, callback);
 	}
 	getJenkinsStatus() {
-		return fetch(jenkinsUrl)
+		return fetchWithTimeout(jenkinsUrl, 10000)
 		.then(response => {
-			if (response.ok) {
+			if (response === undefined) {
+				this.handleNetworkErr({ message: "Jenkins server is not responding"});
+				return false;
+			} else if (response.ok) {
 				return response.json();
 			} else {
 				this.handleNetworkErr(response);
