@@ -3,8 +3,9 @@ import React, { Component } from 'react';
 import CircularProgressbar from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import './App.scss';
+import RightPanel from './RightPanel';
+import ErrorBoundary from './ErrorBoundary';
 import System from './System';
-import JenkinsLog from './JenkinsLog';
 import dumpLoadBalancer from './export';
 import fetchWithTimeout from './fetchWithTimeout';
 
@@ -26,36 +27,6 @@ const serverColors = {
 	"enable": "green",
 	"disable": "grey",
 	"out-of-service-health": "red"
-}
-
-class ErrorBoundary extends Component {
-	constructor(props) {
-		super(props);
-		this.state = { 
-			hasError: false,
-		};
-	}
-	
-	static getDerivedStateFromError(error) {
-		// Update state so the next render will show the fallback UI.
-		return { 
-			hasError: true,
-		};
-	}
-	
-	componentDidCatch(error, info) {
-		console.warn(error);
-	}
-	
-	render() {
-		if (this.state.hasError) {
-			return <div className="error">
-				<h1>Error</h1>
-			</div>
-		}
-		
-		return this.props.children;
-	}
 }
 
 class App extends Component {
@@ -319,7 +290,6 @@ class App extends Component {
 		if (groups.length === 0) {
 			groups = <div className="network-text">{this.state.networkText}</div>
 		}
-		var downedServices = this.state.downedServices.map(service => <DownedService service={service} key={service.id} />);
 		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/this.frequencyToCheck;
 		
 		return (
@@ -347,45 +317,16 @@ class App extends Component {
 						</div>
 					</ErrorBoundary>
 				</div>
-				<div className="stats">
-					<ErrorBoundary>
-						<div className="stat-line stat-line-green">
-							<strong>UP: </strong>
-							<span className="half-circle green"></span>
-							<span>{this.state.serviceStats.up} services,</span>
-							<span className="square green"></span>
-							<span>{this.state.serverStats.up} servers</span>
-						</div>
-						<div className="stat-line stat-line-grey">
-							<strong>DISABLED: </strong>
-							<span className="square grey"></span>
-							<span>{this.state.serverStats.disabled} servers</span>
-						</div>
-						<div className="downed">
-							<div className="stat-line stat-line-red">
-								{simulateDownedService && <strong>**SIMULATED**<br/></strong>}
-								<strong>DOWN: </strong>
-								<span className="half-circle red"></span>
-								<span>{this.state.serviceStats.down} services,</span>
-								<span className="square red"></span>
-								<span>{this.state.serverStats.down} servers</span>
-								
-							</div>
-							<div className="downed-services">
-								{downedServices}
-							</div>
-						</div>
-					</ErrorBoundary>
-					{ this.state.showLegend && 
-						<div className="legend">
-							<h2>Legend</h2>
-							<img src="/sites-monitor/legend.svg" alt="legend" />
-						</div>
-					}
-					<ErrorBoundary>
-						<JenkinsLog timestamps={this.state.timestamps} jobsByTimestamp={this.state.jobsByTimestamp} />
-					</ErrorBoundary>
-				</div>
+				<RightPanel
+					serverColors={serverColors}
+					serviceStats={this.state.serviceStats}
+					serverStats={this.state.serverStats}
+					downedServices={this.state.downedServices}
+					simulateDownedService={simulateDownedService}
+					showLegend={this.state.showLegend}
+					jenkinsTimestamps={this.state.timestamps}
+					jenkinsJobsByTimestamp={this.state.jobsByTimestamp}
+				/>
 			</div>
 		);
 	}
@@ -402,22 +343,6 @@ const Group = props => {
 		) :
 		( <div/> )
 };
-
-class DownedService extends Component {
-	render() {
-		var servers = this.props.service.servers.map(server => <div className="server indent" key={server.id}>
-				<div className={"square " + serverColors[server.operational_status]}></div>
-				<div className="server-name">{server.id}</div>
-		</div>)
-		return <div className="downed-service">
-			<div className="red circle"></div>
-			<div className="downed-service-name">{this.props.service.id}</div>
-			<div>
-				{servers}
-			</div>
-		</div>
-	}
-}
 
 var j;
 var justHidden = false;

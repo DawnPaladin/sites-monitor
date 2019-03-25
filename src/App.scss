@@ -297,7 +297,7 @@ $thin-border:  .055em solid rgba(0, 0, 0, .75);
 		z-index: -1;
 	}
 }
-.stats {
+.right-panel {
 	@include scan-lines(.15);
 	color: white;
 	font-family: 'Roboto', sans-serif;
