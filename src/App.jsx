@@ -135,6 +135,8 @@ class App extends Component {
 		;
 	}
 	processLoadBalancerData(json, callback) {
+		if (!json) return false;
+		
 		const replaceUnderscores = string => string.replace(/_/g, ' ');
 		this.setState({ loading: true });
 
@@ -165,7 +167,7 @@ class App extends Component {
 			down: 0,
 		}
 		this.setState({ downedServices: [] });
-		if (simulateDownedService) groups[8].virtual_services[3].servers[1].operational_status = "out-of-service-health";
+		if (simulateDownedService) groups[10].virtual_services[3].servers[0].operational_status = "out-of-service-health";
 		groups.forEach(group => {
 			group.virtual_services.forEach(service => {
 				if (this.checkIfServiceIsDown(service)) {
@@ -273,8 +275,8 @@ class App extends Component {
 			state.timestamps.sort();
 			state.timestamps.reverse();
 			state.timestamps = state.timestamps.slice(0, numJenkinsBuildsToShow);
-
-			this.setState({ jenkinsStats: jenkinsStats});
+			
+			state.jenkinsStats = jenkinsStats;
 			
 		});		
 	}
