@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import ErrorBoundary from './ErrorBoundary';
+import StatLine from './StatLine';
 import JenkinsLog from './JenkinsLog';
 
 class DownedService extends React.Component {
@@ -36,41 +37,25 @@ export default class RightPanel extends React.Component {
 			down: PropTypes.number,
 			disabled: PropTypes.number,
 		}).isRequired,
-		downedServices: PropTypes.array.required,
+		downedServices: PropTypes.array.isRequired,
 		simulateDownedService: PropTypes.bool,
 		showLegend: PropTypes.bool,
-		jenkinsTimestamps: PropTypes.array.required,
-		jenkinsJobsByTimestamp: PropTypes.array.required,
+		jenkinsTimestamps: PropTypes.array.isRequired,
+		jenkinsJobsByTimestamp: PropTypes.object.isRequired,
 	}
-	constructor(props) {
-		super(props);
-	}
+	// constructor(props) {
+	// 	super(props);
+	// }
 	
 	render() {
-		var downedServices = this.props.downedServices.map(service => <DownedService service={service} key={service.id} />);
+		var downedServices = this.props.downedServices.map(service => <DownedService service={service} key={service.id} serverColors={this.props.serverColors} />);
 		return (<div className="right-panel">
 			<ErrorBoundary>
-				<div className="stat-line stat-line-green">
-					<strong>UP: </strong>
-					<span className="half-circle green"></span>
-					<span>{this.props.serviceStats.up} services,</span>
-					<span className="square green"></span>
-					<span>{this.props.serverStats.up} servers</span>
-				</div>
-				<div className="stat-line stat-line-grey">
-					<strong>DISABLED: </strong>
-					<span className="square grey"></span>
-					<span>{this.props.serverStats.disabled} servers</span>
-				</div>
+				<StatLine title="UP" backgroundColor="hsla(115, 100%, 73.9%, 0.85)" shapeFillColor="lime" services={this.props.serviceStats.up} servers={this.props.serverStats.up} />
+				<StatLine title="DISABLED" backgroundColor="hsla(0, 0%, 75%, 0.85)" shapeFillColor="gray" servers={this.props.serverStats.disabled} />
 				<div className="downed">
-					<div className="stat-line stat-line-red">
-						{this.props.simulateDownedService && <strong>**SIMULATED**<br/></strong>}
-						<strong>DOWN: </strong>
-						<span className="half-circle red"></span>
-						<span>{this.props.serviceStats.down} services,</span>
-						<span className="square red"></span>
-						<span>{this.props.serverStats.down} servers</span>
-					</div>
+					{this.props.simulateDownedService && <center><strong>**SIMULATED**<br/></strong></center>}
+					<StatLine title="DOWN" shapeFillColor="red" services={this.props.serviceStats.down} servers={this.props.serverStats.down} />
 					<div className="downed-services">
 						{downedServices}
 					</div>
