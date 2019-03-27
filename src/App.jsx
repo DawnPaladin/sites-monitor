@@ -247,8 +247,7 @@ class App extends Component {
 									case 'succeeded': jenkinsStats.up += 1;   break;
 									case 'failed':    jenkinsStats.down += 1; break;
 									case 'aborted':                           break;
-									case null: jenkinsStats.building += 1;    break;
-									default: console.warn("Unexpected Jenkins status", job.builds[0].result); break;
+									default: jenkinsStats.building += 1;      break; // A result of null means the job is building. Default is the only way to test for null in a switch.
 								}
 							}
 						}
