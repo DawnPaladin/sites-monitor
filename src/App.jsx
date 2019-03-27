@@ -89,13 +89,14 @@ class App extends Component {
 			});
 		}
 		const tick = () => {
-			this.frequencyToCheck = updateFrequency;
-			if((this.state.serverStats != null && this.state.serviceStats != null && this.state.jenkinsStats != null)
-				&& (this.state.serverStats.down > 0 || this.state.serviceStats.down > 0 || this.state.jenkinsStats.building >0 ))
-			{
-				this.frequencyToCheck = updateFrequencyWhenDown;
+			this.setState({ frequencyToCheck: updateFrequency });
+			if ( 
+				(this.state.serverStats != null && this.state.serviceStats != null && this.state.jenkinsStats != null)
+				&& (this.state.serverStats.down > 0 || this.state.serviceStats.down > 0 || this.state.jenkinsStats.building > 0) 
+			) {
+				this.setState({ frequencyToCheck: updateFrequencyWhenDown });
 			}
-			if (this.state.timeSinceLastUpdate > this.frequencyToCheck - 1) {
+			if (this.state.timeSinceLastUpdate > this.state.frequencyToCheck - 1) {
 				stop();
 				start();
 				this.setState({ showLegend: false });
@@ -286,7 +287,7 @@ class App extends Component {
 		if (groups.length === 0) {
 			groups = <div className="network-text">{this.state.networkText}</div>
 		}
-		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/this.frequencyToCheck;
+		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/this.state.frequencyToCheck;
 		
 		return (
 			<div id="App">
