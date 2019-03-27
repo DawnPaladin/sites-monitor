@@ -246,14 +246,13 @@ class App extends Component {
 							service.jenkinsJobs.push(job);
 							jobMatched = true;
 							if (debugJenkins) { jobsMatched += 1; }
-							if(job.builds.length >0)
-							{
-								switch(resultText[job.builds[0].result])
-								{
-									case 'succeeded':  jenkinsStats.up += 1; break;
-									case 'failed':  jenkinsStats.down += 1; break;
-									case 'aborted':   break;
-									default: jenkinsStats.building += 1; break; /*null is building*/
+							if (job.builds.length > 0 ) {
+								switch (resultText[job.builds[0].result]) {
+									case 'succeeded': jenkinsStats.up += 1;   break;
+									case 'failed':    jenkinsStats.down += 1; break;
+									case 'aborted':                           break;
+									case null: jenkinsStats.building += 1;    break;
+									default: console.warn("Unexpected Jenkins status", job.builds[0].result); break;
 								}
 							}
 						}
