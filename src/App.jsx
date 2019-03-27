@@ -9,6 +9,7 @@ import System from './System';
 import dumpLoadBalancer from './export';
 import fetchWithTimeout from './fetchWithTimeout';
 import { resultText } from './resultText';
+import debounce from './debounce';
 
 const loadBalancerUrl = "/sites-monitor/load-balancer.json";
 const jenkinsUrl = "/sites-monitor/jenkins.json";
@@ -45,7 +46,9 @@ class App extends Component {
 			jobsByTimestamp: {},
 			timestamps: [],
 			showLegend: true,
+			hideCursor: false,
 		};
+		this.cursorVisibilityController = this.cursorVisibilityController.bind(this);
 		this.fetchLoopController = this.fetchLoopController.bind(this);
 		this.checkIfServiceIsDown = this.checkIfServiceIsDown.bind(this);
 		this.getLoadBalancerStatus = this.getLoadBalancerStatus.bind(this);
@@ -56,6 +59,19 @@ class App extends Component {
 	}
 	componentDidMount() {
 		this.fetchLoopController().start();
+		this.cursorVisibilityController();
+	}
+	cursorVisibilityController() {
+		var timeout;
+		var app = this;
+		function restartTimer() {
+			app.setState({ hideCursor: false });
+			clearTimeout(timeout);
+			timeout = setTimeout(() => {
+				app.setState({ hideCursor: true });
+			}, 5000);
+		}
+		document.onmousemove = debounce(restartTimer, 500, true);
 	}
 	fetchLoopController() {
 		const start = () => {
@@ -290,7 +306,7 @@ class App extends Component {
 		var progressbarPercentage = this.state.timeSinceLastUpdate * 100/this.state.frequencyToCheck;
 		
 		return (
-			<div id="App">
+			<div id="App" className={this.state.hideCursor ? "hide-cursor" : ""}>
 				<div className="monitor">
 					<ErrorBoundary>
 						<ul className="groups">
@@ -340,24 +356,5 @@ const Group = props => {
 		) :
 		( <div/> )
 };
-
-var j;
-var justHidden = false;
-document.onmousemove = function () {
-	if (!justHidden) {
-		justHidden = false;
-		clearTimeout(j);
-		document.getElementById('root').style.cursor = 'default';
-		j = setTimeout(hide, 1000);
-	}
-};
-
-function hide() {
-	document.getElementById('root').style.cursor = 'none';
-	justHidden = true;
-	setTimeout(function () {
-		justHidden = false;
-	}, 500);
-}
 
 export default App;
