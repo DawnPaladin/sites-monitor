@@ -64,7 +64,7 @@ export default class RightPanel extends React.Component {
 			{ this.props.showLegend && 
 				<div className="legend">
 					<h2>Legend</h2>
-					<img src="/legend.svg" alt="legend" />
+					<img src="legend.svg" alt="legend" />
 				</div>
 			}
 			<ErrorBoundary>
