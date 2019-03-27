@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import resultText from './App'
 import Diamond from './Diamond';
+import { resultText } from './resultText';
 
 export default class JenkinsLog extends React.Component {
 	static propTypes = {

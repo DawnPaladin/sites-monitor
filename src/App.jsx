@@ -8,16 +8,12 @@ import ErrorBoundary from './ErrorBoundary';
 import System from './System';
 import dumpLoadBalancer from './export';
 import fetchWithTimeout from './fetchWithTimeout';
+import { resultText } from './resultText';
 
 const loadBalancerUrl = "/sites-monitor/load-balancer.json";
 const jenkinsUrl = "/sites-monitor/jenkins.json";
 
 const simulateDownedService = true;
-export const resultText = {
-	"SUCCESS": "succeeded",
-	"FAILURE": "failed",
-	"ABORTED": "aborted",
-}
 const updateFrequency = 15; // seconds to wait between data refreshes
 const updateFrequencyWhenDown = 5; // seconds to wait between data refreshes
 const numJenkinsBuildsToShow = 15;
