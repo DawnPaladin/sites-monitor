@@ -19,7 +19,7 @@ export default class System extends Component {
 			status: PropTypes.string, // should be present, but not on first render
 			jenkinsJobs: PropTypes.arrayOf(PropTypes.shape({
 				builds: PropTypes.arrayOf(PropTypes.shape({
-					result: PropTypes.string.isRequired,
+					result: PropTypes.string,
 					timestamp: PropTypes.number.isRequired
 				})).isRequired,
 			})), // jenkinsJobs are not required
